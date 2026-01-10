@@ -77,7 +77,7 @@ export function LoginForm({
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3">
+          <div className="mt-6 grid grid-cols-1 gap-3">
             <Button 
               type="button" 
               variant="outline" 
@@ -88,7 +88,7 @@ export function LoginForm({
               </svg>
               Google
             </Button>
-            <Button 
+            {/* <Button 
               type="button" 
               variant="outline" 
               className="h-10 border-neutral-200 hover:bg-neutral-50 rounded-lg"
@@ -97,7 +97,7 @@ export function LoginForm({
                 <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2.917 16.083c-3.038-1.425-5.205-4.291-5.205-7.663 0-.528.039-1.048.117-1.557h4.977c.119.486.197.977.197 1.474 0 1.631-.719 3.084-1.863 4.062l2.777 3.684zm5.744-9.908c0-.697-.057-1.38-.168-2.049h-11.121c.082.668.132 1.346.132 2.049 0 3.373-2.167 6.238-5.206 7.663l2.777-3.684c1.144.978 2.607 1.564 4.197 1.564 1.502 0 2.891-.459 4.056-1.237l2.777 3.684c-3.038-1.425-5.206-4.29-5.206-7.663z"/>
               </svg>
               GitHub
-            </Button>
+            </Button> */}
           </div>
         </CardContent>
       </Card>

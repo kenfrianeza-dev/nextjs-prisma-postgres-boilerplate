@@ -3,7 +3,7 @@ import { Separator } from "@/app/components/ui";
 
 export default function Home() {
   return (
-    <div className="min-w-[320px] min-h-svh flex flex-col bg-slate-50 sm:flex-row">
+    <div className="min-w-[320px] min-h-svh flex flex-col bg-white sm:bg-slate-50 sm:flex-row">
 
       {/* LEFT / TOP (Brand) */}
       <section className="flex flex-col items-center justify-center p-8 sm:w-1/2 sm:justify-center sm:items-start shadow-lg">
@@ -48,7 +48,7 @@ export default function Home() {
       />
 
       {/* RIGHT / BOTTOM (Login) */}
-      <section className="shadow-lg flex items-center justify-center p-6 sm:w-1/2 bg-linear-to-br from-white to-slate-50">
+      <section className="lg:shadow-lg flex items-center justify-center p-6 sm:w-1/2 bg-white">
         <LoginForm className="w-full max-w-sm" />
       </section>
 
