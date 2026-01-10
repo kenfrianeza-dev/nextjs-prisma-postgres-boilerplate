@@ -1,0 +1,39 @@
+services:
+  app:
+    container_name: app
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: ${DATABASE_URL}
+      CI: "true" # pnpm needs this in non-interactive environments
+    volumes:
+      - .:/app
+      - pnpm_store:/root/.local/share/pnpm
+    command: sh -c "pnpm install && pnpm dev"
+
+  db:
+    image: postgres:18
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: homestead
+    ports:
+      - "5432:5432"
+    volumes:  
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d homestead"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  pnpm_store:
