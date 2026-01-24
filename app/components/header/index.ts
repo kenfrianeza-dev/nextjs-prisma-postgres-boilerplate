@@ -1,0 +1,1 @@
+export { DynamicBreadcrumbs } from "./dynamic-breadcrumbs";

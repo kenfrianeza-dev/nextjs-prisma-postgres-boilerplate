@@ -1,23 +1,31 @@
-import { cn } from "@/app/lib/utils"
-import Link from "next/link"
-import { Button } from "@/app/components/ui/button"
+"use client";
+
+import { useActionState } from "react";
+import { cn } from "@/app/lib/utils";
+import Link from "next/link";
+import { Button } from "@/app/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/app/components/ui/card"
-import { Input } from "@/app/components/ui/input"
-import { Label } from "@/app/components/ui/label"
+} from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
+import { login } from "@/app/auth-actions/actions";
+import { AlertCircleIcon, PopcornIcon } from "lucide-react";
+import { Alert, AlertTitle } from "@/app/components/ui/alert";
 
-export function LoginForm({
+function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [state, action, isPending] = useActionState(login, undefined);
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="border-0 shadow-xl">
+      <Card className="bg-white dark:bg-secondary/25 dark:backdrop-blur-2xl text-card-foreground">
         <CardHeader className="space-y-2">
           <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
           <CardDescription className="text-base">
@@ -25,66 +33,90 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-6">
+          <form action={action} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
                 Email Address
               </Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="you@example.com"
-                className="h-10 border-neutral-200 focus:border-blue-500 focus:ring-blue-500"
+                className="h-10 bg-white dark:bg-secondary/50"
                 required
               />
+              {state?.errors?.email && (
+                <p className="text-sm text-destructive">{state.errors.email}</p>
+              )}
             </div>
-            
-            <div className="space-y-2">
+
+            <div className="">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-sm font-medium">
                   Password
                 </Label>
                 <Link
                   href="#"
-                  className="text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                  className="text-xs text-primary hover:text-primary/90 font-medium transition-colors"
                 >
                   Forgot password?
                 </Link>
               </div>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="••••••••"
-                className="h-10 border-neutral-200 focus:border-blue-500 focus:ring-blue-500"
+                className="h-10 bg-white dark:bg-secondary/50"
                 required
               />
+              {state?.errors?.password && (
+                <p className="text-sm text-destructive">{state.errors.password}</p>
+              )}
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            {state?.message && (
+              <Alert variant="destructive" className="bg-destructive/15 border-0 text-red-400">
+                <AlertCircleIcon />
+                <AlertTitle>
+                  {state.message}
+                </AlertTitle>
+              </Alert>
+            )}
+
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="w-full h-10 font-medium rounded-lg transition-colors"
             >
-              Sign In
+              {isPending ? "Signing In..." : "Sign In"}
             </Button>
           </form>
 
           <div className="mt-6 relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-neutral-200"></div>
+              <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-neutral-500">Or continue with</span>
+              <span className="px-2 bg-card text-muted-foreground">
+                Or continue with
+              </span>
             </div>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-3">
-            <Button 
-              type="button" 
-              variant="outline" 
-              className="h-10 border-neutral-200 hover:bg-neutral-50 rounded-lg"
+            <Button
+              type="button"
+              variant="outline"
+              className="h-10 bg-background border-input hover:bg-accent hover:text-accent-foreground rounded-lg"
             >
-              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.85 4.05-1.193 1.003-3.05 1.962-5.99 1.962-4.518 0-8.307-3.764-8.307-8.209 0-4.444 3.789-8.209 8.307-8.209 2.26 0 4.18.784 5.577 2.07l2.457-2.457C20.31 2.75 17.812 1 14.48 1 7.027 1 1 7.027 1 14.48s6.027 13.48 13.48 13.48c3.99 0 7.097-1.058 9.335-3.764 2.27-2.868 2.97-6.925 2.97-10.384 0-.64-.057-1.186-.114-1.823h-12.4z"/>
+              <svg
+                className="w-4 h-4 mr-2"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.85 4.05-1.193 1.003-3.05 1.962-5.99 1.962-4.518 0-8.307-3.764-8.307-8.209 0-4.444 3.789-8.209 8.307-8.209 2.26 0 4.18.784 5.577 2.07l2.457-2.457C20.31 2.75 17.812 1 14.48 1 7.027 1 1 7.027 1 14.48s6.027 13.48 13.48 13.48c3.99 0 7.097-1.058 9.335-3.764 2.27-2.868 2.97-6.925 2.97-10.384 0-.64-.057-1.186-.114-1.823h-12.4z" />
               </svg>
               Google
             </Button>
@@ -103,26 +135,34 @@ export function LoginForm({
       </Card>
 
       <div className="text-center space-y-4">
-        <p className="text-sm text-neutral-600">
+        <p className="text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link 
-            href="#" 
-            className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+          <Link
+            href="#"
+            className="text-primary hover:text-primary/90 font-semibold transition-colors"
           >
             Sign up
           </Link>
         </p>
-        <p className="text-xs text-neutral-500 leading-relaxed">
+        <p className="text-xs text-muted-foreground leading-relaxed">
           By signing in, you agree to our{" "}
-          <Link href="#" className="text-blue-600 hover:text-blue-700 underline">
+          <Link
+            href="#"
+            className="text-primary hover:text-primary/90 underline"
+          >
             Terms of Service
-          </Link>
-          {" "}and{" "}
-          <Link href="#" className="text-blue-600 hover:text-blue-700 underline">
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="#"
+            className="text-primary hover:text-primary/90 underline"
+          >
             Privacy Policy
           </Link>
         </p>
       </div>
     </div>
-  )
+  );
 }
+
+export default LoginForm;

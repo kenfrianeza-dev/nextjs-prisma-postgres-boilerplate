@@ -14,7 +14,7 @@ services:
     volumes:
       - .:/app
       - pnpm_store:/root/.local/share/pnpm
-    command: sh -c "pnpm install && pnpm dev"
+    command: sh -c "pnpm install && npx prisma generate && pnpm dev"
 
   db:
     image: postgres:18
