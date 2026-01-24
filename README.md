@@ -155,7 +155,7 @@ This will:
 pnpm prisma db seed
 ```
 
-This populates the database with initial data as defined in [prisma/seed.ts](prisma/seed.ts).
+This populates the database with initial data as defined in [prisma/seed.ts](prisma/seed.ts). Our seeding architecture is modular, allowing you to run specific seeders (see [Modular Seeding](#modular-seeding) below).
 
 #### Step 7: Start the Development Server
 ```bash
@@ -178,7 +178,10 @@ pnpm start            # Start production server
 pnpm prisma migrate dev    # Create and apply migrations
 pnpm prisma migrate reset  # Reset database (development only)
 pnpm prisma studio        # Open Prisma Studio GUI for database
-pnpm prisma db seed       # Seed database with initial data
+pnpm prisma db seed       # Seed database with ALL initial data
+pnpm prisma db seed -- settings # Seed only System Settings
+pnpm prisma db seed -- auth     # Seed only Auth (Roles/Users)
+pnpm prisma db seed -- permissions # Seed only Permissions
 pnpm prisma generate      # Generate Prisma Client
 
 # Linting & Quality
@@ -201,7 +204,12 @@ nextjs-prisma-postgres-boilerplate/
 │   └── utils.ts             # Utility functions
 ├── prisma/
 │   ├── schema.prisma        # Database schema
-│   └── seed.ts              # Database seeding
+│   ├── seed.ts              # Seeder coordinator
+│   └── seeders/             # Modular seeder files
+│       ├── index.ts         # Seeder exports
+│       ├── auth.ts          # Roles and Users
+│       ├── permissions.ts   # System permissions
+│       └── system-settings.ts # Core system settings
 ├── public/                  # Static assets
 ├── .env.local              # Environment variables (create this)
 ├── docker compose.yml      # Docker services configuration

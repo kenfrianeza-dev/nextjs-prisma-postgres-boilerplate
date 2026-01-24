@@ -12,20 +12,13 @@ import {
 } from "@/app/components/ui/breadcrumb"
 import { Home } from "lucide-react"
 import { MODULES } from "@/app/config/modules-constants"
+import { formatLabel } from "@/app/lib/utils"
 
 export function DynamicBreadcrumbs() {
   const pathname = usePathname()
   
   // Split pathname into segments and filter out empty strings
   const segments = pathname.split("/").filter((segment) => segment !== "")
-
-  // Function to format labels (e.g., "user-management" -> "User Management")
-  const formatLabel = (segment: string) => {
-    return segment
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  }
 
   // Helper to check if a route segment should be clickable
   const isRouteClickable = (segment: string) => {

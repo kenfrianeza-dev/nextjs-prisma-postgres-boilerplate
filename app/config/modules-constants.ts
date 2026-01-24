@@ -57,17 +57,6 @@ export const MODULES = {
     blob: "system-settings",
     permission: "read:system-settings",
     icon: SettingsIcon,
-    children: [
-      // {
-      //   name: "General",
-      //   blob: "general",
-      //   permission: "read:system-settings.general",
-      // },
-      // {
-      //   name: "Appearance",
-      //   blob: "appearance",
-      //   permission: "read:system-settings.appearance",
-      // },
-    ],
+    children: [],
   },
 };

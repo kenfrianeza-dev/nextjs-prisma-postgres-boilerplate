@@ -12,17 +12,17 @@ export const NAVIGATIONS = {
     {
       name: "My App 1",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "Option 1",
     },
     {
       name: "My App 2",
       logo: AudioWaveform,
-      plan: "Startup",
+      plan: "Option 2",
     },
     {
       name: "My App 3",
       logo: Command,
-      plan: "Free",
+      plan: "Option 3",
     },
   ],
   navMain: mapModulesToNavItems(MODULES),
