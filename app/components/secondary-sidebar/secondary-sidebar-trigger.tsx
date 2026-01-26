@@ -3,9 +3,17 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/app/components/ui/sheet"
 import { Menu } from "lucide-react"
 
-export const SecondarySidebarTrigger = ({ children }: { children: React.ReactNode }) => {
+export const SecondarySidebarTrigger = ({ 
+  children,
+  open,
+  onOpenChange
+}: { 
+  children: React.ReactNode,
+  open?: boolean,
+  onOpenChange?: (open: boolean) => void
+}) => {
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
         {/* <Button variant="ghost" size="icon"> */}
         <div className="ml-2 mr-4 my-3">

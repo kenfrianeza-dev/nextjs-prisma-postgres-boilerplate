@@ -6,10 +6,24 @@ export async function seedPermissions(prisma: PrismaClient) {
   const permissions = [
     { action: "*", resource: "*", description: "Full system access" },
     { action: "read", resource: "dashboard", description: "Access dashboard" },
+    
+    // User Management
     { action: "read", resource: "users", description: "View users" },
-    { action: "read", resource: "permissions", description: "View permissions" },
+    { action: "create", resource: "users", description: "Create users" },
+    { action: "update", resource: "users", description: "Update users" },
+    { action: "delete", resource: "users", description: "Delete users" },
+    { action: "manage", resource: "users", description: "Full user management" },
+    
     { action: "read", resource: "roles", description: "View roles" },
+    { action: "create", resource: "roles", description: "Create roles" },
+    { action: "update", resource: "roles", description: "Update roles" },
+    { action: "delete", resource: "roles", description: "Delete roles" },
+    
+    { action: "read", resource: "permissions", description: "View permissions" },
+    
+    // System Settings
     { action: "read", resource: "system-settings", description: "View system settings" },
+    { action: "update", resource: "system-settings", description: "Update system settings" },
     { action: "read", resource: "system-settings.general", description: "View system settings general" },
     { action: "read", resource: "system-settings.appearance", description: "View system settings appearance" },
   ];

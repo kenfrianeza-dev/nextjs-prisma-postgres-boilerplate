@@ -23,6 +23,15 @@ export async function seedAuth(prisma: PrismaClient) {
     },
   });
 
+  const adminRole = await prisma.role.upsert({
+    where: { name: "Admin" },
+    update: {},
+    create: {
+      name: "Admin",
+      description: "Administrative access",
+    },
+  });
+
   const userRole = await prisma.role.upsert({
     where: { name: "User" },
     update: {},
@@ -35,41 +44,48 @@ export async function seedAuth(prisma: PrismaClient) {
   /**
    * 2. Permission Mappings
    */
-  const allPermission = await prisma.permission.findUniqueOrThrow({
-    where: { action_resource: { action: "*", resource: "*" } },
-  });
+  const getPermission = async (action: string, resource: string) => {
+    return prisma.permission.findUniqueOrThrow({
+      where: { action_resource: { action, resource } },
+    });
+  };
 
-  const dashboardPermission = await prisma.permission.findUniqueOrThrow({
-    where: { action_resource: { action: "read", resource: "dashboard" } },
-  });
+  const allPermission = await getPermission("*", "*");
+  const dashboardPermission = await getPermission("read", "dashboard");
+  const readUsersPermission = await getPermission("read", "users");
+  const manageUsersPermission = await getPermission("manage", "users");
+  const readRolesPermission = await getPermission("read", "roles");
+  const readPermissionsPermission = await getPermission("read", "permissions");
+  const updateSettingsPermission = await getPermission("update", "system-settings");
 
-  await prisma.rolePermission.upsert({
-    where: {
-      roleId_permissionId: {
-        roleId: superAdminRole.id,
-        permissionId: allPermission.id,
-      },
-    },
-    update: {},
-    create: {
-      roleId: superAdminRole.id,
-      permissionId: allPermission.id,
-    },
-  });
+  // Helper to map role to permissions
+  const assignPermissions = async (roleId: string, permissionIds: string[]) => {
+    for (const permissionId of permissionIds) {
+      await prisma.rolePermission.upsert({
+        where: { roleId_permissionId: { roleId, permissionId } },
+        update: {},
+        create: { roleId, permissionId },
+      });
+    }
+  };
 
-  await prisma.rolePermission.upsert({
-    where: {
-      roleId_permissionId: {
-        roleId: userRole.id,
-        permissionId: dashboardPermission.id,
-      },
-    },
-    update: {},
-    create: {
-      roleId: userRole.id,
-      permissionId: dashboardPermission.id,
-    },
-  });
+  // SuperAdmin gets everything
+  await assignPermissions(superAdminRole.id, [allPermission.id]);
+
+  // Admin gets specific access
+  await assignPermissions(adminRole.id, [
+    dashboardPermission.id,
+    manageUsersPermission.id,
+    readRolesPermission.id,
+    readPermissionsPermission.id,
+    updateSettingsPermission.id,
+  ]);
+
+  // User gets basic access
+  await assignPermissions(userRole.id, [
+    dashboardPermission.id,
+    readUsersPermission.id,
+  ]);
 
   /**
    * 3. Users Setup
@@ -84,6 +100,19 @@ export async function seedAuth(prisma: PrismaClient) {
     create: {
       email,
       firstName: "Super",
+      lastName: "Admin",
+      passwordHash: hashedPassword,
+      isActive: true,
+    },
+  });
+
+  const adminEmail = "admin.dev@gmail.com";
+  const adminUser = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {},
+    create: {
+      email: adminEmail,
+      firstName: "System",
       lastName: "Admin",
       passwordHash: hashedPassword,
       isActive: true,
@@ -129,28 +158,31 @@ export async function seedAuth(prisma: PrismaClient) {
   // Re-checking seed.ts lines 147-184:
   // It uses findFirst and then create. I'll stick to that if upsert is tricky with nulls.
   
-  const existingSuperAdminRole = await prisma.userRole.findFirst({
-    where: { userId: superAdminUser.id, roleId: superAdminRole.id },
-  });
-  if (!existingSuperAdminRole) {
-    await prisma.userRole.create({
-      data: { userId: superAdminUser.id, roleId: superAdminRole.id },
-    });
-  }
+  const roleAssignments = [
+    { userId: superAdminUser.id, roleId: superAdminRole.id },
+    { userId: adminUser.id, roleId: adminRole.id },
+    { userId: standardUser.id, roleId: userRole.id },
+  ];
 
-  const existingUserRoleAssignment = await prisma.userRole.findFirst({
-    where: { userId: standardUser.id, roleId: userRole.id },
-  });
-  if (!existingUserRoleAssignment) {
-    await prisma.userRole.create({
-      data: { userId: standardUser.id, roleId: userRole.id },
+  for (const { userId, roleId } of roleAssignments) {
+    const existing = await prisma.userRole.findFirst({
+      where: { userId, roleId },
     });
+    if (!existing) {
+      await prisma.userRole.create({
+        data: { userId, roleId },
+      });
+    }
   }
 
   if (!IS_PROD) {
     console.log("------------------------------------------------");
     console.log("🔑 Super Admin Credentials (DEV ONLY)");
     console.log(`📧 Email: ${email}`);
+    console.log(`🔒 Password: ${password}`);
+    console.log("------------------------------------------------");
+    console.log("🔑 Admin Credentials (DEV ONLY)");
+    console.log(`📧 Email: ${adminEmail}`);
     console.log(`🔒 Password: ${password}`);
     console.log("------------------------------------------------");
     console.log("🔑 Standard User Credentials (DEV ONLY)");

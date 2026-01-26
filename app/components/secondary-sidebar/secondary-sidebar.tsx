@@ -29,7 +29,7 @@ export const SecondarySidebar = ({
               key={item?.title}
               variant={activeTab === item?.title ? "secondary" : "ghost"}
               className={cn(
-                "w-full h-16 flex justify-start items-center gap-4 rounded-none px-4.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                "w-full h-20 flex justify-start items-center gap-4 rounded-none px-4.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
                 activeTab === item?.title && "bg-secondary"
               )}
               onClick={() => onTabChange?.(item?.title)}
@@ -37,7 +37,7 @@ export const SecondarySidebar = ({
               <item.icon className="h-4 w-4" />
               <div className="flex flex-col items-start justify-start">
                 {item?.title}
-                {item?.description && <span className="text-xs text-muted-foreground">{item?.description}</span>}
+                {item?.description && <span className="text-xs text-muted-foreground text-wrap text-start">{item?.description}</span>}
               </div>
             </Button>
           ))}

@@ -93,7 +93,6 @@ export async function seedSystemSettings(prisma: PrismaClient) {
       settings: [
         { key: "enable_user_management", value: "true", type: "boolean", description: "Enable User Management module" },
         { key: "enable_audit_logs", value: "true", type: "boolean", description: "Enable Audit Logs module" },
-        { key: "enable_billing", value: "false", type: "boolean", description: "Enable Billing/Invoicing module" },
       ]
     },
     {
