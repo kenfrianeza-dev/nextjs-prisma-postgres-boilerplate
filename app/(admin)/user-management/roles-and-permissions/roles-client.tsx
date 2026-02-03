@@ -20,6 +20,7 @@ import {
   Edit,
   MoreHorizontal,
   Trash,
+  Shield,
 } from 'lucide-react';
 
 import { Button } from '@/app/components/ui/button';
@@ -40,42 +41,44 @@ import {
   TableHeader,
   TableRow,
 } from '@/app/components/ui/table';
-import { Badge } from '@/app/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/app/components/ui/avatar';
-import { createUserAction, deleteUserAction, updateUserAction, type UserActionState } from './action';
+import { createRoleAction, deleteRoleAction, updateRoleAction, type RoleActionState } from './action';
 import { toast } from 'sonner';
-import { UserManagementPolicy } from '@/domain/user-management/user-management.policy';
 import { ScrollArea } from '@/app/components/ui/scroll-area';
-import { CreateUserDialog } from '@/app/(admin)/user-management/(components)/create-user-dialog';
-import { EditUserDialog } from '@/app/(admin)/user-management/(components)/edit-user-dialog';
-import { DeleteUserDialog } from '@/app/(admin)/user-management/(components)/delete-user-dialog';
+import { UserManagementPolicy } from '@/domain/user-management/user-management.policy';
+import { RolePermissionsList } from '@/app/(admin)/user-management/(components)/role-permissions-list';
+import { CreateRoleDialog } from '@/app/(admin)/user-management/(components)/create-role-dialog';
+import { EditRoleDialog } from '@/app/(admin)/user-management/(components)/edit-role-dialog';
+import { DeleteRoleDialog } from '@/app/(admin)/user-management/(components)/delete-role-dialog';
 
-type UserWithRoles = {
+type Permission = {
   id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  isActive: boolean;
-  roles: {
-    role: {
-      id: string;
-      name: string;
-    };
+  action: string;
+  resource: string;
+  module: string | null;
+  description: string | null;
+};
+
+type RoleWithPermissions = {
+  id: string;
+  name: string;
+  description: string | null;
+  permissions: {
+    permission: Permission;
   }[];
 };
 
-interface UsersClientProps {
-  users: UserWithRoles[];
-  roles: { id: string; name: string }[];
-  permissions: string[];
+interface RolesClientProps {
+  roles: RoleWithPermissions[];
+  allPermissions: Permission[];
+  userPermissions: string[];
 }
 
-const initialState: UserActionState = {
+const initialState: RoleActionState = {
   message: null,
   success: false,
 };
 
-export function UsersClient({ users, roles, permissions }: UsersClientProps) {
+export function RolesClient({ roles, allPermissions, userPermissions }: RolesClientProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -88,33 +91,33 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<UserWithRoles | null>(null);
+  const [currentRole, setCurrentRole] = useState<RoleWithPermissions | null>(null);
 
-  const canCreate = UserManagementPolicy.createUser(permissions);
-  const canUpdate = UserManagementPolicy.updateUser(permissions);
-  const canDelete = UserManagementPolicy.deleteUser(permissions);
+  const canCreate = UserManagementPolicy.createRole(userPermissions);
+  const canUpdate = UserManagementPolicy.updateRole(userPermissions);
+  const canDelete = UserManagementPolicy.deleteRole(userPermissions);
 
-  // useActionState for Creating User
+  // useActionState for Creating Role
   const [createState, createAction, isCreatePending] = useActionState(
-    createUserAction,
+    createRoleAction,
     initialState
   );
 
-  // useActionState for Updating User
-  const updateUserActionWithId = useMemo(() => {
-    if (!currentUser) return async (prevState: UserActionState, formData: FormData) => prevState;
-    return updateUserAction.bind(null, currentUser.id);
-  }, [currentUser]);
+  // useActionState for Updating Role
+  const updateRoleActionWithId = useMemo(() => {
+    if (!currentRole) return async (prevState: RoleActionState, formData: FormData) => prevState;
+    return updateRoleAction.bind(null, currentRole.id);
+  }, [currentRole]);
 
   const [editState, editAction, isEditPending] = useActionState(
-    updateUserActionWithId,
+    updateRoleActionWithId,
     initialState
   );
 
   // Handle Success Notifications and Modal Closing
   useEffect(() => {
     if (createState.success) {
-      toast.success(createState.message || 'User created successfully');
+      toast.success(createState.message || 'Role created successfully');
       setIsCreateOpen(false);
     } else if (createState.message && !createState.success) {
       toast.error(createState.message);
@@ -123,17 +126,16 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
 
   useEffect(() => {
     if (editState.success) {
-      toast.success(editState.message || 'User updated successfully');
+      toast.success(editState.message || 'Role updated successfully');
       setIsEditOpen(false);
     } else if (editState.message && !editState.success) {
       toast.error(editState.message);
     }
   }, [editState]);
 
-  const columns: ColumnDef<UserWithRoles>[] = [
+  const columns: ColumnDef<RoleWithPermissions>[] = [
     {
-      id: 'name',
-      accessorFn: (row) => `${row.firstName} ${row.lastName}`,
+      accessorKey: 'name',
       header: ({ column }) => {
         return (
           <Button
@@ -141,75 +143,38 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
             className="-ml-4 hover:bg-transparent"
           >
-            Name
+            Role Name
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         );
       },
       cell: ({ row }) => {
-        const user = row.original;
-        const initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+        const role = row.original;
         return (
           <div className="flex items-center gap-3">
-            <Avatar className="h-9 w-9">
-              <AvatarFallback>{initials}</AvatarFallback>
-            </Avatar>
+            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center">
+              <Shield className="h-5 w-5 text-primary" />
+            </div>
             <div className="flex flex-col">
-              <span className="font-medium text-foreground">{user.firstName} {user.lastName}</span>
-              <span className="text-xs text-muted-foreground truncate max-w-[200px]">{user.email}</span>
+              <span className="font-medium text-foreground">{role.name}</span>
+              <span className="text-xs text-muted-foreground truncate max-w-[200px]">{role.description || 'No description'}</span>
             </div>
           </div>
         );
       },
     },
     {
-      accessorKey: 'roles',
-      header: 'Roles',
+      accessorKey: 'permissions',
+      header: 'Permissions',
       cell: ({ row }) => {
-        const userRoles = row.original.roles;
-        return (
-          <div className="flex flex-wrap gap-1">
-            {userRoles.length > 0 ? (
-              userRoles.map((ur) => (
-                <Badge key={ur.role.id} variant="secondary" className="font-normal">
-                  {ur.role.name}
-                </Badge>
-              ))
-            ) : (
-              <span className="text-sm text-muted-foreground italic">No roles</span>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: 'isActive',
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="-ml-4 hover:bg-transparent"
-          >
-            Status
-            <ArrowUpDown className="ml-2 h-3 w-3" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => {
-        const isActive = row.getValue('isActive') as boolean;
-        return (
-          <Badge variant={isActive ? 'default' : 'outline'} className={isActive ? '' : 'text-muted-foreground'}>
-            {isActive ? 'Active' : 'Inactive'}
-          </Badge>
-        );
+        return <RolePermissionsList permissions={row.original.permissions} />;
       },
     },
     {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
-        const user = row.original;
+        const role = row.original;
 
         return (
           <div className="text-right">
@@ -224,30 +189,30 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem
                   onClick={() => {
-                    navigator.clipboard.writeText(user.id);
-                    toast.success('User ID copied to clipboard');
+                    navigator.clipboard.writeText(role.id);
+                    toast.success('Role ID copied to clipboard');
                   }}
                 >
-                  <Copy className="mr-2 h-4 w-4" /> Copy user ID
+                  <Copy className="mr-2 h-4 w-4" /> Copy role ID
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 {canUpdate && (
                   <DropdownMenuItem onClick={() => {
-                    setCurrentUser(user);
+                    setCurrentRole(role);
                     setIsEditOpen(true);
                   }}>
-                    <Edit className="mr-2 h-4 w-4" /> Edit User
+                    <Edit className="mr-2 h-4 w-4" /> Edit Role
                   </DropdownMenuItem>
                 )}
                 {canDelete && (
                   <DropdownMenuItem
                     className="text-red-500 focus:text-red-400 font-medium"
                     onClick={() => {
-                      setCurrentUser(user);
+                      setCurrentRole(role);
                       setIsDeleteOpen(true);
                     }}
                   >
-                    <Trash className="mr-2 h-4 w-4 text-red-500 focus:text-red-400" /> Delete User
+                    <Trash className="mr-2 h-4 w-4 text-red-500 focus:text-red-400" /> Delete Role
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
@@ -259,7 +224,7 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
   ];
 
   const table = useReactTable({
-    data: users,
+    data: roles,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -277,24 +242,19 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
       rowSelection,
       pagination,
     },
-    initialState: {
-      pagination: {
-        pageSize: 20,
-      },
-    },
   });
 
   const [isDeletePending, setIsDeletePending] = useState(false);
   const handleDelete = async () => {
-    if (!currentUser) return;
+    if (!currentRole) return;
     setIsDeletePending(true);
     try {
-      const result = await deleteUserAction(currentUser.id);
+      const result = await deleteRoleAction(currentRole.id);
       if (result.success) {
-        toast.success(result.message || 'User deleted successfully');
+        toast.success(result.message || 'Role deleted successfully');
         setIsDeleteOpen(false);
       } else {
-        toast.error(result.message || 'Failed to delete user');
+        toast.error(result.message || 'Failed to delete role');
       }
     } catch (error) {
       toast.error('An unexpected error occurred');
@@ -307,7 +267,7 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
     <div className="w-full space-y-4">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <Input
-          placeholder="Search user ..."
+          placeholder="Search role ..."
           value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('name')?.setFilterValue(event.target.value)
@@ -315,13 +275,13 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
           className="w-full sm:w-auto"
         />
         {canCreate && (
-          <CreateUserDialog
+          <CreateRoleDialog
             isOpen={isCreateOpen}
             onOpenChange={setIsCreateOpen}
             createAction={createAction}
             createState={createState}
             isCreatePending={isCreatePending}
-            roles={roles}
+            allPermissions={allPermissions}
           />
         )}
       </div>
@@ -364,7 +324,7 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                    No users found.
+                    No roles found.
                   </TableCell>
                 </TableRow>
               )}
@@ -375,7 +335,7 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
 
       <div className="flex items-center justify-between">
         <div className="text-sm text-muted-foreground">
-          Showing {table.getFilteredRowModel().rows.length} users
+          Showing {table.getFilteredRowModel().rows.length} roles
         </div>
         <div className="flex items-center space-x-2">
           <Button
@@ -400,22 +360,22 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
         </div>
       </div>
 
-      <EditUserDialog
+      <EditRoleDialog
         isOpen={isEditOpen}
         onOpenChange={setIsEditOpen}
         editAction={editAction}
         editState={editState}
         isEditPending={isEditPending}
-        currentUser={currentUser}
-        roles={roles}
+        currentRole={currentRole}
+        allPermissions={allPermissions}
       />
 
-      <DeleteUserDialog
+      <DeleteRoleDialog
         isOpen={isDeleteOpen}
         onOpenChange={setIsDeleteOpen}
         onDelete={handleDelete}
         isDeletePending={isDeletePending}
-        currentUser={currentUser}
+        currentRole={currentRole}
       />
     </div>
   );

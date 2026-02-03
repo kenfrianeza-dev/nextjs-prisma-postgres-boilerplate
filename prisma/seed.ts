@@ -9,13 +9,13 @@ async function main() {
 
   if (targetModule) {
     switch (targetModule) {
-      case "auth":
+      case "auth-seeder":
         await seeders.seedAuth(prisma);
         break;
-      case "permissions":
+      case "permissions-seeder":
         await seeders.seedPermissions(prisma);
         break;
-      case "settings":
+      case "settings-seeder":
         await seeders.seedSystemSettings(prisma);
         break;
       default:

@@ -53,7 +53,7 @@ export default function NavMain({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      {/* <SidebarGroupLabel>Human Resource Information System</SidebarGroupLabel> */}
       <SidebarMenu>
         {items.map((item) => (
           item.items && item.items.length > 0 ? (

@@ -1,6 +1,6 @@
 import { AppError } from "@/lib/errors";
-import { UserManagementPolicy } from "./user-management.policy";
-import { UserManagementRepo } from "./user-management.repo";
+import { UserManagementPolicy } from '@/domain/user-management/user-management.policy';
+import { UserManagementRepo } from '@/domain/user-management/user-management.repo';
 import { hashPassword } from "@/lib/password";
 
 export const UserManagementService = {
@@ -8,7 +8,7 @@ export const UserManagementService = {
    * Get all users.
    */
   async getUsers(userPermissions: string[]) {
-    if (!UserManagementPolicy.canViewUsers(userPermissions)) {
+    if (!UserManagementPolicy.viewUsers(userPermissions)) {
       throw AppError.forbidden("You do not have permission to view users.");
     }
 
@@ -19,7 +19,7 @@ export const UserManagementService = {
    * Get all available roles.
    */
   async getRoles(userPermissions: string[]) {
-    if (!UserManagementPolicy.canViewRoles(userPermissions)) {
+    if (!UserManagementPolicy.viewRoles(userPermissions)) {
       throw AppError.forbidden("You do not have permission to view roles.");
     }
 
@@ -36,11 +36,11 @@ export const UserManagementService = {
     password?: string;
     roleIds?: string[];
   }) {
-    if (!UserManagementPolicy.canCreateUser(userPermissions)) {
+    if (!UserManagementPolicy.createUser(userPermissions)) {
       throw AppError.forbidden("You do not have permission to create users.");
     }
 
-    const passwordHash = await hashPassword(data.password || "Password123!"); // Default password
+    const passwordHash = await hashPassword(data.password || "ChangeMeImmediately!"); // Default password
 
     return UserManagementRepo.createUser({
       ...data,
@@ -58,7 +58,7 @@ export const UserManagementService = {
     isActive?: boolean;
     roleIds?: string[];
   }) {
-    if (!UserManagementPolicy.canUpdateUser(userPermissions)) {
+    if (!UserManagementPolicy.updateUser(userPermissions)) {
       throw AppError.forbidden("You do not have permission to update users.");
     }
 
@@ -69,7 +69,7 @@ export const UserManagementService = {
    * Delete a user.
    */
   async deleteUser(userPermissions: string[], id: string) {
-    if (!UserManagementPolicy.canDeleteUser(userPermissions)) {
+    if (!UserManagementPolicy.deleteUser(userPermissions)) {
       throw AppError.forbidden("You do not have permission to delete users.");
     }
 
@@ -77,13 +77,65 @@ export const UserManagementService = {
   },
 
   /**
-   * Get all permissions (placeholder logic).
+   * Get all permissions.
    */
   async getPermissions(userPermissions: string[]) {
-    if (!UserManagementPolicy.canViewPermissions(userPermissions)) {
+    if (!UserManagementPolicy.viewPermissions(userPermissions)) {
       throw AppError.forbidden("You do not have permission to view permissions.");
     }
 
-    return [];
+    return UserManagementRepo.getAllPermissions();
+  },
+
+  /**
+   * Get a role by ID.
+   */
+  async getRoleById(userPermissions: string[], id: string) {
+    if (!UserManagementPolicy.viewRoles(userPermissions)) {
+      throw AppError.forbidden("You do not have permission to view roles.");
+    }
+
+    return UserManagementRepo.getRoleById(id);
+  },
+
+  /**
+   * Create a new role.
+   */
+  async createRole(userPermissions: string[], data: {
+    name: string;
+    description?: string;
+    permissionIds?: string[];
+  }) {
+    if (!UserManagementPolicy.createRole(userPermissions)) {
+      throw AppError.forbidden("You do not have permission to create roles.");
+    }
+
+    return UserManagementRepo.createRole(data);
+  },
+
+  /**
+   * Update an existing role.
+   */
+  async updateRole(userPermissions: string[], id: string, data: {
+    name?: string;
+    description?: string;
+    permissionIds?: string[];
+  }) {
+    if (!UserManagementPolicy.updateRole(userPermissions)) {
+      throw AppError.forbidden("You do not have permission to update roles.");
+    }
+
+    return UserManagementRepo.updateRole(id, data);
+  },
+
+  /**
+   * Delete a role.
+   */
+  async deleteRole(userPermissions: string[], id: string) {
+    if (!UserManagementPolicy.deleteRole(userPermissions)) {
+      throw AppError.forbidden("You do not have permission to delete roles.");
+    }
+
+    return UserManagementRepo.deleteRole(id);
   },
 };

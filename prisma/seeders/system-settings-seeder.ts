@@ -59,7 +59,7 @@ export async function seedSystemSettings(prisma: PrismaClient) {
     {
       name: "UI Branding",
       slug: "ui-branding",
-      description: "Whitelabeling and look & feel",
+      description: "Whitelabeling, look & feel",
       icon: "Palette",
       order: 4,
       settings: [
@@ -67,6 +67,7 @@ export async function seedSystemSettings(prisma: PrismaClient) {
         { key: "secondary_color", value: "#ffffff", type: "string", description: "Secondary theme color" },
         { key: "dark_mode_default", value: "false", type: "boolean", description: "Default to dark mode" },
         { key: "app_name", value: "NextJS Boilerplate", type: "string", description: "Application name used in headers" },
+        { key: "app_name_short", value: "SYS", type: "string", description: "Application short-name used in headers" },
         { key: "favicon", value: "/favicon.ico", type: "string", description: "Path to favicon" },
         { key: "email_logo", value: "/images/email-logo.png", type: "string", description: "Logo for email templates" },
         { key: "footer_text", value: "© 2026 ABc Corp", type: "string", description: "Footer copyright text" },

@@ -35,6 +35,7 @@ model Permission {
   id          String           @id @default(cuid())
   action      String
   resource    String
+  module      String?
   description String?
   roles       RolePermission[]
 

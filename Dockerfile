@@ -7,8 +7,9 @@ RUN corepack enable
 # Set working directory
 WORKDIR /app
 
-# Copy package files first (pnpm-lock.yaml is required)
-COPY package.json pnpm-lock.yaml ./
+# Copy package files and Prisma schema
+COPY package.json pnpm-lock.yaml prisma.config.ts ./
+COPY prisma ./prisma/
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile

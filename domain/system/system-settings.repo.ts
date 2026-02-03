@@ -25,6 +25,7 @@ export const SystemSettingsRepo = {
   async getSettingByKey(key: string) {
     return prisma.systemSetting.findUnique({
       where: { key },
+      include: { category: true },
     });
   },
 

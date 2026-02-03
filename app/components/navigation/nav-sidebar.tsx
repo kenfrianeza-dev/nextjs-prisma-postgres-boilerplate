@@ -8,6 +8,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarRail,
 } from "@/app/components/ui/sidebar"
@@ -17,6 +18,7 @@ const navigations = NAVIGATIONS;
 
 import { MODULES } from "@/app/config/modules-constants"
 import { mapModulesToNavItems } from "@/app/config/navigation-utils"
+import { User } from "lucide-react"
 
 function AppSidebar({
   user,
@@ -37,9 +39,14 @@ function AppSidebar({
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="flex items-center justify-center p-2">
         <TeamSwitcher teams={navigations.teams} />
+        {/* <SidebarGroupLabel>Platform</SidebarGroupLabel> */}
       </SidebarHeader>
+      {/* <SidebarHeader className="flex items-center justify-center px-4 pt-4"> */}
+        {/* <SidebarGroupLabel className="text-lg font-bold">HRIS</SidebarGroupLabel> */}
+        {/* <p className="text-xs -mt-2 mb-2 text-muted-foreground text-center">Human Resource Information System</p> */}
+      {/* </SidebarHeader> */}
       <SidebarContent>
         <NavMain items={items} />
       </SidebarContent>

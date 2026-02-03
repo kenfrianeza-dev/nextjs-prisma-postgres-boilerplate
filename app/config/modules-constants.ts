@@ -41,14 +41,9 @@ export const MODULES = {
         permission: "read:users",
       },
       {
-        name: "Permissions",
-        blob: "permissions",
-        permission: "read:permissions",
-      },
-      {
-        name: "Roles",
-        blob: "roles",
-        permission: "read:roles",
+        name: "Roles & Permissions",
+        blob: "roles-and-permissions",
+        permission: ["read:roles", "read:permissions"],
       },
     ],
   },

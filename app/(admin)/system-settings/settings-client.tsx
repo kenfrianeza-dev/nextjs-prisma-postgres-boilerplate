@@ -1,6 +1,6 @@
 "use client"
 
-import { Container } from '@/app/components/container';
+import { Container, ContainerHeader } from '@/app/components/container';
 import { MenuItems } from '@/app/components/secondary-sidebar/secondary-sidebar';
 import {
   Palette,
@@ -23,6 +23,8 @@ import { saveSetting } from '@/server/actions/settings.actions';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/app/components/ui/select';
 import { toast } from "sonner";
 import { Spinner } from '@/app/components/ui/spinner';
+import { SystemSettingsPolicy } from '@/domain/system/system-settings.policy';
+
 
 const ICON_MAP: Record<string, LucideIcon> = {
   Building2,
@@ -65,13 +67,18 @@ export default function SettingsClient({
     title: cat.name,
     description: cat.description || undefined,
     icon: ICON_MAP[cat.icon as string] || Settings,
+    slug: cat.slug,
+    permission: `read:system-settings.${cat.slug}`
   }));
 
   const [activeTab, setActiveTab] = useState(menuItems[0]?.title || "");
   const [isSaving, setIsSaving] = useState<string | null>(null);
 
   const activeCategory = categories.find(cat => cat.name === activeTab);
-  
+  const canUpdateActiveCategory = activeCategory 
+    ? SystemSettingsPolicy.canUpdateByCategory(permissions, activeCategory.slug)
+    : false;
+
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -87,22 +94,22 @@ export default function SettingsClient({
     }
   };
 
+
+
   return (
     <Container
       menuItems={menuItems}
       activeTab={activeTab}
       onTabChange={setActiveTab}
+      permissions={permissions}
     >
-      <div className="max-w-4xl space-y-6">
+      <div className="max-w-4xl space-y-4">
         {activeCategory ? (
           <>
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">{activeCategory.name}</h1>
-              <p className="text-muted-foreground mt-2">{activeCategory.description}</p>
-            </div>
-
+            <ContainerHeader title={activeCategory.name} description={activeCategory.description || ""} />
             <div className="grid gap-4">
-              {activeCategory.settings.map((setting) => (
+              {activeCategory.settings.map((setting) => {
+                return (
                 <Card key={setting.id} className='shadow-none'>
                   <CardHeader>
                     <CardTitle className="text-base">{setting.description || setting.key}</CardTitle>
@@ -111,42 +118,53 @@ export default function SettingsClient({
                   <CardContent>
                     <form onSubmit={handleSave} className="flex items-end gap-4">
                       <input type="hidden" name="key" value={setting.key} />
-                      <div className="grid flex-1 gap-4">
+                      <div className="flex justify-start items-start flex-1 gap-4">
                         <Label htmlFor={setting.key} className="sr-only">Value</Label>
                         {setting.type === "boolean" ? (
-                          <Select
-                            name="value"
-                            defaultValue={setting.value || "false"}
-                          >
-                            <SelectTrigger id={setting.key}>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>True or False?</SelectLabel>
-                                <SelectItem value="true">True</SelectItem>
-                                <SelectItem value="false">False</SelectItem>
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
+                          <div className='flex flex-col items-start gap-2 w-1/2'>
+                            <Select
+                              name="value"
+                              defaultValue={setting.value || "false"}
+                              disabled={!canUpdateActiveCategory || isSaving === setting.key}
+                            >
+                              <SelectTrigger id={setting.key}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>True or False?</SelectLabel>
+                                  <SelectItem value="true">True</SelectItem>
+                                  <SelectItem value="false">False</SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                            {!canUpdateActiveCategory && (
+                              <p className="text-muted-foreground text-xs">You do not have permission to update this setting.</p>
+                            )}
+                          </div>
                         ) : (
-                          <Input
-                            id={setting.key}
-                            name="value"
-                            defaultValue={setting.value || ""}
-                            placeholder={`Enter ${setting.description?.toLowerCase() || 'value'}`}
-                            type={setting.type === "number" ? "number" : "text"}
-                            disabled={isSaving === setting.key}
-                          />
+                          <div className='flex flex-col items-start gap-2 w-full'>
+                            <Input
+                              id={setting.key}
+                              name="value"
+                              defaultValue={setting.value || ""}
+                              placeholder={`Enter ${setting.description?.toLowerCase() || 'value'}`}
+                              type={setting.type === "number" ? "number" : "text"}
+                              disabled={!canUpdateActiveCategory || isSaving === setting.key}
+                            />
+                            {!canUpdateActiveCategory && (
+                              <p className="text-muted-foreground text-xs">You do not have permission to update this setting.</p>
+                            )}
+                          </div>
                         )}
                       </div>
-                      <Button className='w-1/8' type="submit" disabled={isSaving === setting.key}>
+                      <Button className='w-1/4 lg:w-1/8 mb-auto' type="submit" disabled={!canUpdateActiveCategory || isSaving === setting.key}>
                         {isSaving === setting.key ? <Spinner /> : "Save"}
                       </Button>
                     </form>
                   </CardContent>
                 </Card>
-              ))}
+              )})}
             </div>
           </>
         ) : (

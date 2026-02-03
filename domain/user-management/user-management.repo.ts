@@ -14,19 +14,134 @@ export const UserManagementRepo = {
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
   },
 
   /**
-   * Get all available roles.
+   * Get all available roles with permissions.
    */
   async getAllRoles() {
     return prisma.role.findMany({
-      orderBy: {
-        name: 'asc',
+      include: {
+        permissions: {
+          include: {
+            permission: true,
+          },
+        },
       },
+      orderBy: {
+        name: "asc",
+      },
+    });
+  },
+
+  /**
+   * Get a role by ID with permissions.
+   */
+  async getRoleById(id: string) {
+    return prisma.role.findUnique({
+      where: { id },
+      include: {
+        permissions: {
+          include: {
+            permission: true,
+          },
+        },
+      },
+    });
+  },
+
+  /**
+   * Create a new role.
+   */
+  async createRole(data: {
+    name: string;
+    description?: string;
+    permissionIds?: string[];
+  }) {
+    const { permissionIds, ...roleData } = data;
+
+    return prisma.role.create({
+      data: {
+        ...roleData,
+        permissions: {
+          create: permissionIds?.map((permissionId) => ({
+            permissionId,
+          })),
+        },
+      },
+      include: {
+        permissions: {
+          include: {
+            permission: true,
+          },
+        },
+      },
+    });
+  },
+
+  /**
+   * Update an existing role.
+   */
+  async updateRole(
+    id: string,
+    data: {
+      name?: string;
+      description?: string;
+      permissionIds?: string[];
+    },
+  ) {
+    const { permissionIds, ...roleData } = data;
+
+    return prisma.$transaction(async (tx) => {
+      if (permissionIds) {
+        // Delete existing permissions
+        await tx.rolePermission.deleteMany({
+          where: { roleId: id },
+        });
+
+        // Add new permissions
+        if (permissionIds.length > 0) {
+          await tx.rolePermission.createMany({
+            data: permissionIds.map((permissionId) => ({
+              roleId: id,
+              permissionId,
+            })),
+          });
+        }
+      }
+
+      return tx.role.update({
+        where: { id },
+        data: roleData,
+        include: {
+          permissions: {
+            include: {
+              permission: true,
+            },
+          },
+        },
+      });
+    });
+  },
+
+  /**
+   * Delete a role.
+   */
+  async deleteRole(id: string) {
+    return prisma.role.delete({
+      where: { id },
+    });
+  },
+
+  /**
+   * Get all permissions.
+   */
+  async getAllPermissions() {
+    return prisma.permission.findMany({
+      orderBy: [{ resource: "asc" }, { action: "asc" }],
     });
   },
 
@@ -57,12 +172,12 @@ export const UserManagementRepo = {
     roleIds?: string[];
   }) {
     const { roleIds, ...userData } = data;
-    
+
     return prisma.user.create({
       data: {
         ...userData,
         roles: {
-          create: roleIds?.map(roleId => ({
+          create: roleIds?.map((roleId) => ({
             roleId,
           })),
         },
@@ -73,13 +188,16 @@ export const UserManagementRepo = {
   /**
    * Update an existing user.
    */
-  async updateUser(id: string, data: {
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    isActive?: boolean;
-    roleIds?: string[];
-  }) {
+  async updateUser(
+    id: string,
+    data: {
+      email?: string;
+      firstName?: string;
+      lastName?: string;
+      isActive?: boolean;
+      roleIds?: string[];
+    },
+  ) {
     const { roleIds, ...userData } = data;
 
     return prisma.$transaction(async (tx) => {
@@ -92,7 +210,7 @@ export const UserManagementRepo = {
         // Add new roles
         if (roleIds.length > 0) {
           await tx.userRole.createMany({
-            data: roleIds.map(roleId => ({
+            data: roleIds.map((roleId) => ({
               userId: id,
               roleId,
             })),

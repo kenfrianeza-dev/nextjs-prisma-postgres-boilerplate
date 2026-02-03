@@ -21,6 +21,13 @@ export type UserActionState = {
     roleIds?: string[];
     isActive?: string[];
   };
+  data?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    roleIds?: string[];
+    isActive?: boolean;
+  };
   message?: string | null;
   success?: boolean;
 };
@@ -45,6 +52,7 @@ export async function createUserAction(prevState: UserActionState, formData: For
       errors: validation.error.flatten().fieldErrors,
       message: "Please input valid data.",
       success: false,
+      data: rawData,
     };
   }
 
@@ -52,10 +60,21 @@ export async function createUserAction(prevState: UserActionState, formData: For
     await UserManagementService.createUser(session.permissions, validation.data);
     revalidatePath('/user-management/users');
     return { message: "User created successfully", success: true };
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === 'P2002') {
+      return { 
+        message: "A user with this email already exists.", 
+        success: false,
+        errors: {
+          email: ["Email already in use"]
+        },
+        data: rawData,
+      };
+    }
     return { 
       message: error instanceof Error ? error.message : "Failed to create user", 
-      success: false 
+      success: false,
+      data: rawData,
     };
   }
 }
@@ -81,6 +100,7 @@ export async function updateUserAction(id: string, prevState: UserActionState, f
       errors: validation.error.flatten().fieldErrors,
       message: "Please input valid data.",
       success: false,
+      data: rawData,
     };
   }
 
@@ -88,10 +108,21 @@ export async function updateUserAction(id: string, prevState: UserActionState, f
     await UserManagementService.updateUser(session.permissions, id, validation.data);
     revalidatePath('/user-management/users');
     return { message: "User updated successfully", success: true };
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === 'P2002') {
+      return { 
+        message: "A user with this email already exists.", 
+        success: false,
+        errors: {
+          email: ["Email already in use"]
+        },
+        data: rawData,
+      };
+    }
     return { 
       message: error instanceof Error ? error.message : "Failed to update user", 
-      success: false 
+      success: false,
+      data: rawData,
     };
   }
 }

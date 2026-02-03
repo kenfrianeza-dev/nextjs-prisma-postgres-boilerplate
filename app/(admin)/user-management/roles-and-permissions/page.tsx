@@ -4,17 +4,17 @@ import { verifySession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { UserManagementService } from '@/domain/user-management/user-management.service';
 import { ErrorCode, isAppErrorCode } from '@/lib/errors';
-import { UsersClient } from './users-client';
+import { RolesClient } from './roles-client';
 import { Skeleton } from '@/app/components/ui/skeleton';
 
-const UsersPageSkeleton = () => (
+const RolesPageSkeleton = () => (
   <div className="space-y-4">
     <div className="flex justify-between items-center">
       <Skeleton className="h-10 w-[300px]" />
       <Skeleton className="h-10 w-[120px]" />
     </div>
-    <div className="border rounded-md">
-      <div className="p-4 border-b">
+    <div className="border rounded-md overflow-hidden">
+      <div className="p-4 bg-muted/50 border-b">
         <div className="flex gap-4">
           <Skeleton className="h-6 w-full" />
         </div>
@@ -34,22 +34,22 @@ const UsersPageSkeleton = () => (
   </div>
 );
 
-const UsersPage = async () => {
+const RolesPage = async () => {
   const session = await verifySession();
   if (!session) redirect('/');
 
   try {
-    const users = await UserManagementService.getUsers(session.permissions);
     const roles = await UserManagementService.getRoles(session.permissions);
+    const allPermissions = await UserManagementService.getPermissions(session.permissions);
     
     return (
       <Container className='space-y-4'>
-        <ContainerHeader title="Users" description="Manage users information and their roles." />
-        <React.Suspense fallback={<UsersPageSkeleton />}>
-          <UsersClient 
-            users={JSON.parse(JSON.stringify(users))} 
-            roles={JSON.parse(JSON.stringify(roles))}
-            permissions={session.permissions}
+        <ContainerHeader title="Roles & Permissions" description="Manage roles and their associated permissions." />
+        <React.Suspense fallback={<RolesPageSkeleton />}>
+          <RolesClient 
+            roles={JSON.parse(JSON.stringify(roles))} 
+            allPermissions={JSON.parse(JSON.stringify(allPermissions))}
+            userPermissions={session.permissions}
           />
         </React.Suspense>
       </Container>
@@ -62,4 +62,4 @@ const UsersPage = async () => {
   }
 }
 
-export default UsersPage;
+export default RolesPage;

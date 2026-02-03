@@ -1,5 +1,5 @@
-import { SystemSettingsRepo } from "./system-settings.repo";
-import { SystemSettingsPolicy } from "./system-settings.policy";
+import { SystemSettingsRepo } from "@/domain/system/system-settings.repo";
+import { SystemSettingsPolicy } from "@/domain/system/system-settings.policy";
 import { AppError } from "@/lib/errors";
 
 export const SystemSettingsService = {
@@ -7,27 +7,27 @@ export const SystemSettingsService = {
    * Get all settings categorized, filtered by user permissions.
    */
   async getCategorizedSettings(userPermissions: string[]) {
-    if (!SystemSettingsPolicy.canView(userPermissions)) {
+    if (!SystemSettingsPolicy.viewSettings(userPermissions)) {
       throw AppError.forbidden("You do not have permission to view system settings.");
     }
 
     const categories = await SystemSettingsRepo.getAllCategoriesWithSettings();
     
     // Filter categories based on specific read permissions if necessary
-    return categories.filter(category => SystemSettingsPolicy.canViewCategory(userPermissions, category.slug));
+    return categories.filter(category => SystemSettingsPolicy.viewSettingsCategory(userPermissions, category.slug));
   },
 
   /**
    * Update a specific setting.
    */
   async updateSetting(userPermissions: string[], key: string, value: string) {
-    if (!SystemSettingsPolicy.canUpdate(userPermissions)) {
-      throw AppError.forbidden("You do not have permission to update system settings.");
-    }
-
     const setting = await SystemSettingsRepo.getSettingByKey(key);
     if (!setting) {
       throw AppError.notFound(`Setting with key "${key}" not found.`);
+    }
+
+    if (!SystemSettingsPolicy.canUpdateByCategory(userPermissions, setting.category.slug)) {
+      throw AppError.forbidden("You do not have permission to update this system setting.");
     }
 
     // Validation based on type
@@ -40,14 +40,13 @@ export const SystemSettingsService = {
    * Bulk update settings.
    */
   async updateSettings(userPermissions: string[], settings: { key: string; value: string }[]) {
-    if (!SystemSettingsPolicy.canUpdate(userPermissions)) {
-      throw AppError.forbidden("You do not have permission to update system settings.");
-    }
-
-    // Validate all settings before proceeding
+    // Validate all settings and check permissions before proceeding
     for (const item of settings) {
       const setting = await SystemSettingsRepo.getSettingByKey(item.key);
       if (setting) {
+        if (!SystemSettingsPolicy.canUpdateByCategory(userPermissions, setting.category.slug)) {
+          throw AppError.forbidden(`You do not have permission to update the setting: ${item.key}`);
+        }
         this.validateSettingValue(setting.type, item.value, item.key);
       }
     }

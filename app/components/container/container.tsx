@@ -10,13 +10,15 @@ export const Container = ({
   menuItems,
   className,
   activeTab,
-  onTabChange
+  onTabChange,
+  permissions
 }: {
   children: React.ReactNode,
   menuItems?: MenuItems[],
   className?: string,
   activeTab?: string,
-  onTabChange?: (tab: string) => void
+  onTabChange?: (tab: string) => void,
+  permissions?: string[]
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -39,6 +41,7 @@ export const Container = ({
                 className="border-none w-full"
                 activeTab={activeTab}
                 onTabChange={handleTabChange}
+                permissions={permissions}
               />
             </SecondarySidebarTrigger>
             <span className="text-sm">Settings</span>
@@ -50,6 +53,7 @@ export const Container = ({
               menuItems={menuItems}
               activeTab={activeTab}
               onTabChange={onTabChange}
+              permissions={permissions}
             />
           </div>
         </>
