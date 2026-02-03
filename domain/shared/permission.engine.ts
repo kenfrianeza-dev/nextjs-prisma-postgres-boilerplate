@@ -5,9 +5,13 @@ export const PermissionEngine = {
     if (permissions.includes(perm)) return true;
 
     return permissions.some(p => {
-      if (!p.includes("*")) return false;
-      const pattern = p.replace("*", "");
-      return perm.startsWith(pattern);
+      if (p.includes("*")) {
+        const pattern = p.replace("*", "");
+        return perm.startsWith(pattern);
+      }
+      
+      // Hierarchical check: if p is a parent of perm (e.g., read:system-settings matches read:system-settings.org)
+      return perm.startsWith(p + ".");
     });
   },
 

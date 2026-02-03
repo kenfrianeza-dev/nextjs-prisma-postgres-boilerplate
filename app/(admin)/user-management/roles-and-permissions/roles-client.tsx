@@ -323,7 +323,7 @@ export function RolesClient({ roles, allPermissions, userPermissions }: RolesCli
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+                  <TableCell colSpan={columns.length} className="h-[555px] text-center text-muted-foreground">
                     No roles found.
                   </TableCell>
                 </TableRow>

@@ -103,7 +103,7 @@ export default function SettingsClient({
       onTabChange={setActiveTab}
       permissions={permissions}
     >
-      <div className="max-w-4xl space-y-4">
+      <div className="max-w-full h-full space-y-4">
         {activeCategory ? (
           <>
             <ContainerHeader title={activeCategory.name} description={activeCategory.description || ""} />
@@ -168,8 +168,8 @@ export default function SettingsClient({
             </div>
           </>
         ) : (
-          <div className="flex h-[400px] items-center justify-center rounded-lg border border-dashed">
-            <p className="text-muted-foreground">Select a category from the sidebar</p>
+          <div className="flex h-full w-full items-center justify-center rounded-lg border border-dashed">
+            <p className="text-muted-foreground text-center text-sm">Select a category from the sidebar</p>
           </div>
         )}
       </div>

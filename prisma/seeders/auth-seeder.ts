@@ -52,11 +52,10 @@ export async function seedAuth(prisma: PrismaClient) {
 
   const allPermission = await getPermission("*", "*");
   const dashboardPermission = await getPermission("read", "dashboard");
-  const readUsersPermission = await getPermission("read", "users");
   const manageUsersPermission = await getPermission("manage", "users");
-  const readRolesPermission = await getPermission("read", "roles");
-  const readPermissionsPermission = await getPermission("read", "permissions");
-  const updateSettingsPermission = await getPermission("update", "system-settings");
+  const manageRolesPermission = await getPermission("manage", "roles-and-permissions");
+  const updateSystemSettingsPermission = await getPermission("update", "system-settings");
+  const readSystemSettingsPermission = await getPermission("read", "system-settings");
 
   // Helper to map role to permissions
   const assignPermissions = async (roleId: string, permissionIds: string[]) => {
@@ -69,22 +68,24 @@ export async function seedAuth(prisma: PrismaClient) {
     }
   };
 
-  // SuperAdmin gets everything
+  // Super Admin gets everything
   await assignPermissions(superAdminRole.id, [allPermission.id]);
 
   // Admin gets specific access
   await assignPermissions(adminRole.id, [
     dashboardPermission.id,
-    manageUsersPermission.id,
-    readRolesPermission.id,
-    readPermissionsPermission.id,
-    updateSettingsPermission.id,
+    (await getPermission("read", "users")).id,
+    (await getPermission("read", "roles-and-permissions")).id,
+    readSystemSettingsPermission.id,
+    (await getPermission("read", "system-settings.organization")).id,
+    (await getPermission("update", "system-settings.organization")).id,
+    (await getPermission("read", "system-settings.module-toggles")).id,
+    (await getPermission("update", "system-settings.module-toggles")).id,
   ]);
 
   // User gets basic access
   await assignPermissions(userRole.id, [
     dashboardPermission.id,
-    readUsersPermission.id,
   ]);
 
   /**

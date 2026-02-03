@@ -14,12 +14,11 @@ export async function seedPermissions(prisma: PrismaClient) {
     { module: "User Management", action: "delete", resource: "users", description: "Delete users" },
     { module: "User Management", action: "manage", resource: "users", description: "Full user management" },
     
-    { module: "User Management", action: "read", resource: "roles", description: "View roles" },
-    { module: "User Management", action: "create", resource: "roles", description: "Create roles" },
-    { module: "User Management", action: "update", resource: "roles", description: "Update roles" },
-    { module: "User Management", action: "delete", resource: "roles", description: "Delete roles" },
-    
-    { module: "User Management", action: "read", resource: "permissions", description: "View permissions" },
+    { module: "User Management", action: "read", resource: "roles-and-permissions", description: "View roles and permissions" },
+    { module: "User Management", action: "create", resource: "roles-and-permissions", description: "Create roles" },
+    { module: "User Management", action: "update", resource: "roles-and-permissions", description: "Update roles" },
+    { module: "User Management", action: "delete", resource: "roles-and-permissions", description: "Delete roles" },
+    { module: "User Management", action: "manage", resource: "roles-and-permissions", description: "Full roles and permissions management" },
     
     // System Settings
     { module: "System Settings", action: "read", resource: "system-settings", description: "View system settings" },
