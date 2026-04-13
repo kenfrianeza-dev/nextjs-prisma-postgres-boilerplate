@@ -12,6 +12,11 @@ export const UserManagementRepo = {
             role: true,
           },
         },
+        permissions: {
+          include: {
+            permission: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -157,6 +162,11 @@ export const UserManagementRepo = {
             role: true,
           },
         },
+        permissions: {
+          include: {
+            permission: true,
+          },
+        },
       },
     });
   },
@@ -170,8 +180,9 @@ export const UserManagementRepo = {
     lastName: string;
     passwordHash: string;
     roleIds?: string[];
+    permissionIds?: string[];
   }) {
-    const { roleIds, ...userData } = data;
+    const { roleIds, permissionIds, ...userData } = data;
 
     return prisma.user.create({
       data: {
@@ -179,6 +190,11 @@ export const UserManagementRepo = {
         roles: {
           create: roleIds?.map((roleId) => ({
             roleId,
+          })),
+        },
+        permissions: {
+          create: permissionIds?.map((permissionId) => ({
+            permissionId,
           })),
         },
       },
@@ -196,9 +212,10 @@ export const UserManagementRepo = {
       lastName?: string;
       isActive?: boolean;
       roleIds?: string[];
+      permissionIds?: string[];
     },
   ) {
-    const { roleIds, ...userData } = data;
+    const { roleIds, permissionIds, ...userData } = data;
 
     return prisma.$transaction(async (tx) => {
       if (roleIds) {
@@ -218,6 +235,23 @@ export const UserManagementRepo = {
         }
       }
 
+      if (permissionIds) {
+        // Delete existing permissions
+        await tx.userPermission.deleteMany({
+          where: { userId: id },
+        });
+
+        // Add new permissions
+        if (permissionIds.length > 0) {
+          await tx.userPermission.createMany({
+            data: permissionIds.map((permissionId) => ({
+              userId: id,
+              permissionId,
+            })),
+          });
+        }
+      }
+
       return tx.user.update({
         where: { id },
         data: userData,
@@ -225,6 +259,11 @@ export const UserManagementRepo = {
           roles: {
             include: {
               role: true,
+            },
+          },
+          permissions: {
+            include: {
+              permission: true,
             },
           },
         },

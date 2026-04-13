@@ -52,8 +52,8 @@ export async function seedAuth(prisma: PrismaClient) {
 
   const allPermission = await getPermission("*", "*");
   const dashboardPermission = await getPermission("read", "dashboard");
-  const manageUsersPermission = await getPermission("manage", "users");
-  const manageRolesPermission = await getPermission("manage", "roles-and-permissions");
+  const manageUsersPermission = await getPermission("manage", "user-management.users");
+  const manageRolesPermission = await getPermission("manage", "user-management.roles-and-permissions");
   const updateSystemSettingsPermission = await getPermission("update", "system-settings");
   const readSystemSettingsPermission = await getPermission("read", "system-settings");
 
@@ -74,8 +74,8 @@ export async function seedAuth(prisma: PrismaClient) {
   // Admin gets specific access
   await assignPermissions(adminRole.id, [
     dashboardPermission.id,
-    (await getPermission("read", "users")).id,
-    (await getPermission("read", "roles-and-permissions")).id,
+    (await getPermission("read", "user-management.users")).id,
+    (await getPermission("read", "user-management.roles-and-permissions")).id,
     readSystemSettingsPermission.id,
     (await getPermission("read", "system-settings.organization")).id,
     (await getPermission("update", "system-settings.organization")).id,

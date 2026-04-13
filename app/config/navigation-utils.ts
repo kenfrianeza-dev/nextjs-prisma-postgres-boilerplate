@@ -1,6 +1,6 @@
 import { MODULES } from "@/app/config/modules-constants";
 
-import { hasPermission } from "@/lib/permissions";
+import { PermissionEngine } from "@/domain/shared/permission.engine";
 
 export function mapModulesToNavItems(
   modules: typeof MODULES,
@@ -10,7 +10,7 @@ export function mapModulesToNavItems(
     .map((module: any) => {
       // Filter children first
       const authorizedChildren = module.children.filter((child: any) =>
-        permissions ? hasPermission(permissions, child.permission) : true
+        permissions ? PermissionEngine.has(permissions, child.permission) : true
       );
 
       // Check if module itself has a permission requirement (if any)
@@ -18,7 +18,7 @@ export function mapModulesToNavItems(
       // If it has no children (like Dashboard), we check its own permission if present.
 
       const isModuleAccessible = permissions
-        ? hasPermission(permissions, module.permission)
+        ? PermissionEngine.has(permissions, module.permission)
         : true;
 
       // Special case: If module has children, it's visible if it has at least one authorized child.
@@ -29,6 +29,7 @@ export function mapModulesToNavItems(
         module.children.length === 0 ? isModuleAccessible : hasVisibleChildren;
 
       if (!shouldShowModule) return null;
+
 
       return {
         title: module.name,

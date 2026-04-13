@@ -41,15 +41,17 @@ const UsersPage = async () => {
   try {
     const users = await UserManagementService.getUsers(session.permissions);
     const roles = await UserManagementService.getRoles(session.permissions);
-    
+    const allPermissions = await UserManagementService.getPermissions(session.permissions);
+
     return (
       <Container className='space-y-4'>
         <ContainerHeader title="Users" description="Manage users information and their roles." />
         <React.Suspense fallback={<UsersPageSkeleton />}>
           <UsersClient 
-            users={JSON.parse(JSON.stringify(users))} 
-            roles={JSON.parse(JSON.stringify(roles))}
+            users={users} 
+            roles={roles}
             permissions={session.permissions}
+            allPermissions={allPermissions}
           />
         </React.Suspense>
       </Container>

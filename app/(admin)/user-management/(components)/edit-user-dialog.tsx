@@ -13,6 +13,8 @@ import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 import { Spinner } from '@/app/components/ui/spinner';
 import { ScrollArea } from '@/app/components/ui/scroll-area';
+import { RolePermissionsForm } from './role-permissions-form';
+import { UserRolesForm } from './user-roles-form';
 import type { UserActionState } from '../users/action';
 
 type UserWithRoles = {
@@ -27,6 +29,18 @@ type UserWithRoles = {
       name: string;
     };
   }[];
+  permissions: {
+    id: string;
+    userId: string;
+    permissionId: string;
+    permission: {
+      id: string;
+      action: string;
+      resource: string;
+      module: string | null;
+      description: string | null;
+    };
+  }[];
 };
 
 interface EditUserDialogProps {
@@ -37,6 +51,7 @@ interface EditUserDialogProps {
   isEditPending: boolean;
   currentUser: UserWithRoles | null;
   roles: { id: string; name: string }[];
+  allPermissions: { id: string; action: string; resource: string; module: string | null; description: string | null }[];
 }
 
 export function EditUserDialog({
@@ -47,10 +62,11 @@ export function EditUserDialog({
   isEditPending,
   currentUser,
   roles,
+  allPermissions,
 }: EditUserDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[600px]">
         <form action={editAction} key={isOpen ? 'edit-form-' + (editState.data ? JSON.stringify(editState.data) : (currentUser?.id ?? 'initial')) : 'initial'}>
           <DialogHeader>
             <DialogTitle>Edit User</DialogTitle>
@@ -87,27 +103,18 @@ export function EditUserDialog({
                 />
                 <Label htmlFor="edit-isActive">User is active</Label>
               </div>
-              <div className="grid gap-2">
-                <Label className={editState.errors?.roleIds ? 'text-destructive' : ''}>Assign Roles <span className="text-red-500 ml-0.5">*</span></Label>
-                <ScrollArea className="h-[300px] border rounded-md p-2">
-                  <div className={`grid grid-cols-2 gap-2 p-2 ${editState.errors?.roleIds ? 'border-destructive' : ''}`}>
-                    {roles.map((role) => (
-                      <div key={role.id} className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id={`edit-role-${role.id}`}
-                          name="roles"
-                          value={role.id}
-                          defaultChecked={editState.errors?.roleIds ? currentUser.roles.some(ur => ur.role.id === role.id) : (editState.data?.roleIds ? editState.data.roleIds.includes(role.id) : currentUser.roles.some(ur => ur.role.id === role.id))}
-                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                        />
-                        <Label htmlFor={`edit-role-${role.id}`} className="font-normal">{role.name}</Label>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-                {editState.errors?.roleIds && <p className="text-xs text-destructive">{editState.errors.roleIds[0]}</p>}
-              </div>
+              <UserRolesForm
+                roles={roles}
+                selectedRoleIds={editState.data?.roleIds ?? currentUser.roles.map(ur => ur.role.id)}
+                errors={editState.errors?.roleIds}
+                idPrefix="edit-user"
+              />
+
+              <RolePermissionsForm
+                allPermissions={allPermissions}
+                selectedPermissionIds={editState.data?.permissionIds ?? currentUser.permissions.map(p => p.permissionId)}
+                idPrefix="edit-user"
+              />
             </div>
           )}
           <DialogFooter>

@@ -16,25 +16,42 @@ type SessionPayload = {
 };
 
 async function getUserPermissions(userId: string): Promise<string[]> {
-  const permissions = await prisma.permission.findMany({
-    where: {
-      roles: {
-        some: {
-          role: {
-            users: {
-              some: { userId },
+  const [rolePermissions, userDirectPermissions] = await Promise.all([
+    prisma.permission.findMany({
+      where: {
+        roles: {
+          some: {
+            role: {
+              users: {
+                some: { userId },
+              },
             },
           },
         },
       },
-    },
-    select: {
-      action: true,
-      resource: true,
-    },
-  });
+      select: {
+        action: true,
+        resource: true,
+      },
+    }),
+    prisma.permission.findMany({
+      where: {
+        users: {
+          some: { userId },
+        },
+      },
+      select: {
+        action: true,
+        resource: true,
+      },
+    }),
+  ]);
 
-  return permissions.map((p) => `${p.action}:${p.resource}`);
+  const allPermissions = [...rolePermissions, ...userDirectPermissions];
+  const formattedPermissions = allPermissions.map((p) => `${p.action}:${p.resource}`);
+  
+  // Deduplicate
+  return Array.from(new Set(formattedPermissions));
 }
 
 export async function encrypt(payload: SessionPayload) {

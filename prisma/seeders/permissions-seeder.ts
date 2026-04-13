@@ -8,21 +8,25 @@ export async function seedPermissions(prisma: PrismaClient) {
     { module: "Dashboard", action: "read", resource: "dashboard", description: "Access dashboard" },
     
     // User Management
-    { module: "User Management", action: "read", resource: "users", description: "View users" },
-    { module: "User Management", action: "create", resource: "users", description: "Create users" },
-    { module: "User Management", action: "update", resource: "users", description: "Update users" },
-    { module: "User Management", action: "delete", resource: "users", description: "Delete users" },
-    { module: "User Management", action: "manage", resource: "users", description: "Full user management" },
+    { module: "User Management", action: "read", resource: "user-management", description: "Access user management" },
+    { module: "User Management", action: "manage", resource: "user-management", description: "Full user management access" },
     
-    { module: "User Management", action: "read", resource: "roles-and-permissions", description: "View roles and permissions" },
-    { module: "User Management", action: "create", resource: "roles-and-permissions", description: "Create roles" },
-    { module: "User Management", action: "update", resource: "roles-and-permissions", description: "Update roles" },
-    { module: "User Management", action: "delete", resource: "roles-and-permissions", description: "Delete roles" },
-    { module: "User Management", action: "manage", resource: "roles-and-permissions", description: "Full roles and permissions management" },
+    { module: "User Management", action: "read", resource: "user-management.users", description: "View users" },
+    { module: "User Management", action: "create", resource: "user-management.users", description: "Create users" },
+    { module: "User Management", action: "update", resource: "user-management.users", description: "Update users" },
+    { module: "User Management", action: "delete", resource: "user-management.users", description: "Delete users" },
+    { module: "User Management", action: "manage", resource: "user-management.users", description: "Full user management" },
+    
+    { module: "User Management", action: "read", resource: "user-management.roles-and-permissions", description: "View roles and permissions" },
+    { module: "User Management", action: "create", resource: "user-management.roles-and-permissions", description: "Create roles" },
+    { module: "User Management", action: "update", resource: "user-management.roles-and-permissions", description: "Update roles" },
+    { module: "User Management", action: "delete", resource: "user-management.roles-and-permissions", description: "Delete roles" },
+    { module: "User Management", action: "manage", resource: "user-management.roles-and-permissions", description: "Full roles and permissions management" },
     
     // System Settings
     { module: "System Settings", action: "read", resource: "system-settings", description: "View system settings" },
     { module: "System Settings", action: "update", resource: "system-settings", description: "Update system settings" },
+    { module: "System Settings", action: "manage", resource: "system-settings", description: "Full system settings access" },
     
     // System Settings - Categories
     { module: "System Settings", action: "read", resource: "system-settings.organization", description: "View organization settings" },

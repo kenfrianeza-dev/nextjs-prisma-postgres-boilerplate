@@ -48,7 +48,7 @@ export class AppError extends Error {
   /**
    * Helper to create a Bad Request error
    */
-  static badRequest(message: string) {
+  static badRequest(message: string = "Bad request.") {
     return new AppError(ErrorCode.BAD_REQUEST, message);
   }
 }

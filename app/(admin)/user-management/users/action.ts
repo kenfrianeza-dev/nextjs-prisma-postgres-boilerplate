@@ -10,6 +10,7 @@ const UserSchema = z.object({
   lastName: z.string().min(2, 'Last name must be at least 2 characters'),
   email: z.email('Invalid email address'),
   roleIds: z.array(z.string()).min(1, 'At least one role must be assigned'),
+  permissionIds: z.array(z.string()).optional(),
   isActive: z.boolean().optional(),
 });
 
@@ -19,6 +20,7 @@ export type UserActionState = {
     lastName?: string[];
     email?: string[];
     roleIds?: string[];
+    permissionIds?: string[];
     isActive?: string[];
   };
   data?: {
@@ -26,6 +28,7 @@ export type UserActionState = {
     lastName?: string;
     email?: string;
     roleIds?: string[];
+    permissionIds?: string[];
     isActive?: boolean;
   };
   message?: string | null;
@@ -43,6 +46,7 @@ export async function createUserAction(prevState: UserActionState, formData: For
     firstName: formData.get('firstName') as string,
     lastName: formData.get('lastName') as string,
     roleIds: formData.getAll('roles') as string[],
+    permissionIds: formData.getAll('permissions') as string[],
   };
 
   const validation = UserSchema.safeParse(rawData);
@@ -91,6 +95,7 @@ export async function updateUserAction(id: string, prevState: UserActionState, f
     lastName: formData.get('lastName') as string,
     isActive: formData.get('isActive') === 'on',
     roleIds: formData.getAll('roles') as string[],
+    permissionIds: formData.getAll('permissions') as string[],
   };
 
   const validation = UserSchema.safeParse(rawData);

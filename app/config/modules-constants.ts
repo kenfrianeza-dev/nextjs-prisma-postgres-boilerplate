@@ -9,7 +9,7 @@ export interface ModuleChild {
   id: string;
   label: string;
   slug: string;
-  permission?: string;
+  permission?: string | string[];
 }
 
 export interface Module {
@@ -17,7 +17,7 @@ export interface Module {
   label: string;
   slug: string;
   icon: LucideIcon;
-  permission?: string;
+  permission?: string | string[];
   children: ModuleChild[];
 }
 
@@ -32,25 +32,31 @@ export const MODULES = {
   user_management: {
     name: "User Management",
     blob: "user-management",
-    // permission: "read:user-management",
+    permission: ["manage:user-management", "read:user-management"],
     icon: Users2,
     children: [
       {
         name: "Users",
         blob: "users",
-        permission: "read:users",
+        permission: [
+          "manage:user-management.users",
+          "read:user-management.users",
+        ],
       },
       {
         name: "Roles & Permissions",
         blob: "roles-and-permissions",
-        permission: ["read:roles", "read:permissions"],
+        permission: [
+          "manage:user-management.roles-and-permissions",
+          "read:user-management.roles-and-permissions",
+        ],
       },
     ],
   },
   system_settings: {
     name: "System Settings",
     blob: "system-settings",
-    permission: "read:system-settings",
+    permission: ["manage:system-settings", "read:system-settings"],
     icon: SettingsIcon,
     children: [],
   },

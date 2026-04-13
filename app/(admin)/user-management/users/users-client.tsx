@@ -62,12 +62,25 @@ type UserWithRoles = {
       name: string;
     };
   }[];
+  permissions: {
+    id: string;
+    userId: string;
+    permissionId: string;
+    permission: {
+      id: string;
+      action: string;
+      resource: string;
+      module: string | null;
+      description: string | null;
+    };
+  }[];
 };
 
 interface UsersClientProps {
   users: UserWithRoles[];
   roles: { id: string; name: string }[];
   permissions: string[];
+  allPermissions: { id: string; action: string; resource: string; module: string | null; description: string | null }[];
 }
 
 const initialState: UserActionState = {
@@ -75,7 +88,7 @@ const initialState: UserActionState = {
   success: false,
 };
 
-export function UsersClient({ users, roles, permissions }: UsersClientProps) {
+export function UsersClient({ users, roles, permissions, allPermissions }: UsersClientProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -93,6 +106,9 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
   const canCreate = UserManagementPolicy.createUser(permissions);
   const canUpdate = UserManagementPolicy.updateUser(permissions);
   const canDelete = UserManagementPolicy.deleteUser(permissions);
+
+  console.log("permissions ng kupal:");
+  console.log(permissions);
 
   // useActionState for Creating User
   const [createState, createAction, isCreatePending] = useActionState(
@@ -322,6 +338,7 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
             createState={createState}
             isCreatePending={isCreatePending}
             roles={roles}
+            allPermissions={allPermissions}
           />
         )}
       </div>
@@ -408,6 +425,7 @@ export function UsersClient({ users, roles, permissions }: UsersClientProps) {
         isEditPending={isEditPending}
         currentUser={currentUser}
         roles={roles}
+        allPermissions={allPermissions}
       />
 
       <DeleteUserDialog

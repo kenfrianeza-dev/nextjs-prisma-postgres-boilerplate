@@ -12,7 +12,8 @@ import {
   ToggleLeft,
   Receipt,
   Code2,
-  LucideIcon
+  LucideIcon,
+  AlertTriangleIcon
 } from 'lucide-react';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
@@ -24,6 +25,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { toast } from "sonner";
 import { Spinner } from '@/app/components/ui/spinner';
 import { SystemSettingsPolicy } from '@/domain/system/system-settings.policy';
+import { Alert, AlertDescription, AlertTitle } from '@/app/components/ui';
 
 
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -75,7 +77,7 @@ export default function SettingsClient({
   const [isSaving, setIsSaving] = useState<string | null>(null);
 
   const activeCategory = categories.find(cat => cat.name === activeTab);
-  const canUpdateActiveCategory = activeCategory 
+  const canUpdateActiveCategory = activeCategory
     ? SystemSettingsPolicy.canUpdateByCategory(permissions, activeCategory.slug)
     : false;
 
@@ -94,7 +96,16 @@ export default function SettingsClient({
     }
   };
 
-
+  const AlertComponent = () => {
+    return (
+      <Alert variant="warning" className="text-xs w-fit"><AlertTriangleIcon />
+        {/* <AlertTitle>Read-only mode.</AlertTitle> */}
+        <AlertDescription>
+          Read-only. You don't have permission to update this.
+        </AlertDescription>
+      </Alert>
+    )
+  }
 
   return (
     <Container
@@ -110,61 +121,62 @@ export default function SettingsClient({
             <div className="grid gap-4">
               {activeCategory.settings.map((setting) => {
                 return (
-                <Card key={setting.id} className='shadow-none'>
-                  <CardHeader>
-                    <CardTitle className="text-base">{setting.description || setting.key}</CardTitle>
-                    <CardDescription className="font-mono text-xs">{setting.key}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleSave} className="flex items-end gap-4">
-                      <input type="hidden" name="key" value={setting.key} />
-                      <div className="flex justify-start items-start flex-1 gap-4">
-                        <Label htmlFor={setting.key} className="sr-only">Value</Label>
-                        {setting.type === "boolean" ? (
-                          <div className='flex flex-col items-start gap-2 w-1/2'>
-                            <Select
-                              name="value"
-                              defaultValue={setting.value || "false"}
-                              disabled={!canUpdateActiveCategory || isSaving === setting.key}
-                            >
-                              <SelectTrigger id={setting.key}>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectGroup>
-                                  <SelectLabel>True or False?</SelectLabel>
-                                  <SelectItem value="true">True</SelectItem>
-                                  <SelectItem value="false">False</SelectItem>
-                                </SelectGroup>
-                              </SelectContent>
-                            </Select>
-                            {!canUpdateActiveCategory && (
-                              <p className="text-muted-foreground text-xs">You do not have permission to update this setting.</p>
-                            )}
-                          </div>
-                        ) : (
-                          <div className='flex flex-col items-start gap-2 w-full'>
-                            <Input
-                              id={setting.key}
-                              name="value"
-                              defaultValue={setting.value || ""}
-                              placeholder={`Enter ${setting.description?.toLowerCase() || 'value'}`}
-                              type={setting.type === "number" ? "number" : "text"}
-                              disabled={!canUpdateActiveCategory || isSaving === setting.key}
-                            />
-                            {!canUpdateActiveCategory && (
-                              <p className="text-muted-foreground text-xs">You do not have permission to update this setting.</p>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <Button className='w-1/4 lg:w-1/8 mb-auto' type="submit" disabled={!canUpdateActiveCategory || isSaving === setting.key}>
-                        {isSaving === setting.key ? <Spinner /> : "Save"}
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              )})}
+                  <Card key={setting.id} className='shadow-none'>
+                    <CardHeader>
+                      <CardTitle className="text-base">{setting.description || setting.key}</CardTitle>
+                      <CardDescription className="font-mono text-xs">{setting.key}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <form onSubmit={handleSave} className="flex items-end gap-4">
+                        <input type="hidden" name="key" value={setting.key} />
+                        <div className="flex justify-start items-start flex-1 gap-4">
+                          <Label htmlFor={setting.key} className="sr-only">Value</Label>
+                          {setting.type === "boolean" ? (
+                            <div className='flex flex-col items-start gap-2 w-full'>
+                              <Select
+                                name="value"
+                                defaultValue={setting.value || "false"}
+                                disabled={!canUpdateActiveCategory || isSaving === setting.key}
+                              >
+                                <SelectTrigger id={setting.key}>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>True or False?</SelectLabel>
+                                    <SelectItem value="true">True</SelectItem>
+                                    <SelectItem value="false">False</SelectItem>
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                              {!canUpdateActiveCategory && (
+                                <AlertComponent />
+                              )}
+                            </div>
+                          ) : (
+                            <div className='flex flex-col items-start gap-2 w-full'>
+                              <Input
+                                id={setting.key}
+                                name="value"
+                                defaultValue={setting.value || ""}
+                                placeholder={`Enter ${setting.description?.toLowerCase() || 'value'}`}
+                                type={setting.type === "number" ? "number" : "text"}
+                                disabled={!canUpdateActiveCategory || isSaving === setting.key}
+                              />
+                              {!canUpdateActiveCategory && (
+                                <AlertComponent />
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <Button className='w-1/4 lg:w-1/8 mb-auto' type="submit" disabled={!canUpdateActiveCategory || isSaving === setting.key}>
+                          {isSaving === setting.key ? <Spinner /> : "Save"}
+                        </Button>
+                      </form>
+                    </CardContent>
+                  </Card>
+                )
+              })}
             </div>
           </>
         ) : (

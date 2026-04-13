@@ -19,6 +19,7 @@ model User {
   auditLogs    AuditLog[]
   sessions     Session[]
   roles        UserRole[]
+  permissions  UserPermission[]
 }
 
 model Role {
@@ -38,6 +39,7 @@ model Permission {
   module      String?
   description String?
   roles       RolePermission[]
+  users       UserPermission[]
 
   @@unique([action, resource])
 }
@@ -63,6 +65,16 @@ model RolePermission {
   role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
   @@unique([roleId, permissionId])
+}
+
+model UserPermission {
+  id           String     @id @default(cuid())
+  userId       String
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, permissionId])
 }
 
 model AuditLog {

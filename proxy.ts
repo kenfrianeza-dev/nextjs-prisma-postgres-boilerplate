@@ -20,6 +20,9 @@ export default async function proxy(req: NextRequest) {
 
   let session = await decrypt(accessToken);
 
+  console.log("Session of currently logged in user:");
+  console.log(session);
+
   // 🔁 Try refresh token if access token expired
   if (!session && refreshToken) {
     const refreshPayload = await decryptRefresh(refreshToken);

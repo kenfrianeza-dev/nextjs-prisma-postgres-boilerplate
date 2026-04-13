@@ -14,7 +14,7 @@ async function SystemSettingsPage() {
     return (
       <SettingsClient 
         permissions={session.permissions} 
-        categories={JSON.parse(JSON.stringify(categories))} 
+        categories={categories} 
       />
     );
   } catch (error) {

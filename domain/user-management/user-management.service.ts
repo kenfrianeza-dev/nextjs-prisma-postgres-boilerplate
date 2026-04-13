@@ -35,6 +35,7 @@ export const UserManagementService = {
     lastName: string;
     password?: string;
     roleIds?: string[];
+    permissionIds?: string[];
   }) {
     if (!UserManagementPolicy.createUser(userPermissions)) {
       throw AppError.forbidden("You do not have permission to create users.");
@@ -57,6 +58,7 @@ export const UserManagementService = {
     lastName?: string;
     isActive?: boolean;
     roleIds?: string[];
+    permissionIds?: string[];
   }) {
     if (!UserManagementPolicy.updateUser(userPermissions)) {
       throw AppError.forbidden("You do not have permission to update users.");
