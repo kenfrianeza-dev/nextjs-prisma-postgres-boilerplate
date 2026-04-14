@@ -15,7 +15,7 @@ type SessionPayload = {
   expiresAt: Date;
 };
 
-async function getUserPermissions(userId: string): Promise<string[]> {
+export async function getUserPermissions(userId: string): Promise<string[]> {
   const [rolePermissions, userDirectPermissions] = await Promise.all([
     prisma.permission.findMany({
       where: {

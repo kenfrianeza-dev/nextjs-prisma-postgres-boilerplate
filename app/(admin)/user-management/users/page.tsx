@@ -37,11 +37,18 @@ const UsersPageSkeleton = () => (
 const UsersPage = async () => {
   const session = await verifySession();
   if (!session) redirect('/');
+  console.log("Active session:");
+  console.log(session);
 
   try {
-    const users = await UserManagementService.getUsers(session.permissions);
-    const roles = await UserManagementService.getRoles(session.permissions);
-    const allPermissions = await UserManagementService.getPermissions(session.permissions);
+    const [users, rolesData, allPermissions] = await Promise.all([
+      UserManagementService.getUsers(session.permissions),
+      UserManagementService.getRoles(session.permissions),
+      UserManagementService.getPermissions(session.permissions),
+    ]);
+
+    // Simple list for the roles checkboxes
+    const roles = rolesData.map((r: any) => ({ id: r.id, name: r.name }));
 
     return (
       <Container className='space-y-4'>
@@ -52,6 +59,7 @@ const UsersPage = async () => {
             roles={roles}
             permissions={session.permissions}
             allPermissions={allPermissions}
+            rolesWithPermissions={rolesData}
           />
         </React.Suspense>
       </Container>

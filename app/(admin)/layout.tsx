@@ -4,15 +4,11 @@ import { AppSidebar } from "@/app/components/navigation";
 import { DynamicBreadcrumbs } from "@/app/components/header";
 import { getAuthContext } from "@/lib/auth-context";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/app/components/ui/sidebar";
-import { Separator } from "@/app/components/ui/separator";
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
   const auth = await getAuthContext();
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
-
-  // console.log(" --- Auth Context --- ");
-  // console.log(auth);
 
   if (!auth || !auth.user) {
     redirect('/');

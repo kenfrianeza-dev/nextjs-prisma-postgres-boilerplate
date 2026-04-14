@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 import { ScrollArea } from '@/app/components/ui/scroll-area';
@@ -13,13 +13,21 @@ interface Role {
 
 interface UserRolesFormProps {
   roles: Role[];
-  selectedRoleIds?: string[];
+  selectedRoleIds: string[];
   errors?: string[];
   idPrefix: string;
+  onRoleChange: (selectedRoleIds: string[]) => void;
 }
 
-export function UserRolesForm({ roles, selectedRoleIds = [], errors, idPrefix }: UserRolesFormProps) {
+export function UserRolesForm({ roles, selectedRoleIds, errors, idPrefix, onRoleChange }: UserRolesFormProps) {
   const [search, setSearch] = useState('');
+
+  const handleToggle = (roleId: string, checked: boolean) => {
+    const next = checked
+      ? [...selectedRoleIds, roleId]
+      : selectedRoleIds.filter((id) => id !== roleId);
+    onRoleChange(next);
+  };
 
   const filteredRoles = useMemo(() => {
     return roles.filter((role) =>
@@ -52,7 +60,8 @@ export function UserRolesForm({ roles, selectedRoleIds = [], errors, idPrefix }:
                 id={`${idPrefix}-role-${role.id}`}
                 name="roles"
                 value={role.id}
-                defaultChecked={selectedRoleIds.includes(role.id)}
+                checked={selectedRoleIds.includes(role.id)}
+                onChange={(e) => handleToggle(role.id, e.target.checked)}
                 className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
               />
               <Label htmlFor={`${idPrefix}-role-${role.id}`} className="font-normal">

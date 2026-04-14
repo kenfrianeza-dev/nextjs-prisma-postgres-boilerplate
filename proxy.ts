@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { decrypt, decryptRefresh, encrypt } from "@/lib/auth";
+import { decrypt, decryptRefresh, encrypt, getUserPermissions } from "@/lib/auth";
 import { cookies } from "next/headers";
 
 const protectedRoutes = ["/dashboard", "/admin"];
@@ -20,19 +20,21 @@ export default async function proxy(req: NextRequest) {
 
   let session = await decrypt(accessToken);
 
-  console.log("Session of currently logged in user:");
-  console.log(session);
-
   // 🔁 Try refresh token if access token expired
   if (!session && refreshToken) {
     const refreshPayload = await decryptRefresh(refreshToken);
 
     if (refreshPayload?.exp && Date.now() < refreshPayload.exp * 1000) {
+      const userId = refreshPayload.userId as string;
       const newExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+      // Re-fetch fresh permissions from DB instead of using stale ones from the token
+      const freshPermissions = await getUserPermissions(userId);
+
       const newAccessToken = await encrypt({
-        userId: refreshPayload.userId as string,
+        userId,
         expiresAt: newExpiresAt,
-        permissions: refreshPayload.permissions as string[],
+        permissions: freshPermissions,
       });
 
       const response = NextResponse.next();

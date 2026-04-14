@@ -76,11 +76,22 @@ type UserWithRoles = {
   }[];
 };
 
+type RoleWithPermissions = {
+  id: string;
+  name: string;
+  permissions: {
+    permission: {
+      id: string;
+    };
+  }[];
+};
+
 interface UsersClientProps {
   users: UserWithRoles[];
   roles: { id: string; name: string }[];
   permissions: string[];
   allPermissions: { id: string; action: string; resource: string; module: string | null; description: string | null }[];
+  rolesWithPermissions: RoleWithPermissions[];
 }
 
 const initialState: UserActionState = {
@@ -88,7 +99,7 @@ const initialState: UserActionState = {
   success: false,
 };
 
-export function UsersClient({ users, roles, permissions, allPermissions }: UsersClientProps) {
+export function UsersClient({ users, roles, permissions, allPermissions, rolesWithPermissions }: UsersClientProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -106,9 +117,6 @@ export function UsersClient({ users, roles, permissions, allPermissions }: Users
   const canCreate = UserManagementPolicy.createUser(permissions);
   const canUpdate = UserManagementPolicy.updateUser(permissions);
   const canDelete = UserManagementPolicy.deleteUser(permissions);
-
-  console.log("permissions ng kupal:");
-  console.log(permissions);
 
   // useActionState for Creating User
   const [createState, createAction, isCreatePending] = useActionState(
@@ -339,6 +347,7 @@ export function UsersClient({ users, roles, permissions, allPermissions }: Users
             isCreatePending={isCreatePending}
             roles={roles}
             allPermissions={allPermissions}
+            rolesWithPermissions={rolesWithPermissions}
           />
         )}
       </div>
@@ -418,6 +427,7 @@ export function UsersClient({ users, roles, permissions, allPermissions }: Users
       </div>
 
       <EditUserDialog
+        key={currentUser?.id ?? 'no-user'}
         isOpen={isEditOpen}
         onOpenChange={setIsEditOpen}
         editAction={editAction}
@@ -426,6 +436,7 @@ export function UsersClient({ users, roles, permissions, allPermissions }: Users
         currentUser={currentUser}
         roles={roles}
         allPermissions={allPermissions}
+        rolesWithPermissions={rolesWithPermissions}
       />
 
       <DeleteUserDialog

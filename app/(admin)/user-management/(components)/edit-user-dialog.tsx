@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/app/components/ui/button';
 import {
   Dialog,
@@ -43,6 +44,16 @@ type UserWithRoles = {
   }[];
 };
 
+type RoleWithPermissions = {
+  id: string;
+  name: string;
+  permissions: {
+    permission: {
+      id: string;
+    };
+  }[];
+};
+
 interface EditUserDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -52,6 +63,7 @@ interface EditUserDialogProps {
   currentUser: UserWithRoles | null;
   roles: { id: string; name: string }[];
   allPermissions: { id: string; action: string; resource: string; module: string | null; description: string | null }[];
+  rolesWithPermissions: RoleWithPermissions[];
 }
 
 export function EditUserDialog({
@@ -63,9 +75,21 @@ export function EditUserDialog({
   currentUser,
   roles,
   allPermissions,
+  rolesWithPermissions,
 }: EditUserDialogProps) {
+  const defaultRoleIds = editState.data?.roleIds ?? currentUser?.roles.map(ur => ur.role.id) ?? [];
+  const [selectedRoleIds, setSelectedRoleIds] = useState<string[]>(defaultRoleIds);
+
+  // Reset selectedRoleIds when dialog opens with a different user
+  const handleOpenChange = (open: boolean) => {
+    if (open && currentUser) {
+      setSelectedRoleIds(currentUser.roles.map(ur => ur.role.id));
+    }
+    onOpenChange(open);
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <form action={editAction} key={isOpen ? 'edit-form-' + (editState.data ? JSON.stringify(editState.data) : (currentUser?.id ?? 'initial')) : 'initial'}>
           <DialogHeader>
@@ -76,6 +100,7 @@ export function EditUserDialog({
           </DialogHeader>
           {currentUser && (
             <div className="grid gap-4 py-4">
+
               <div className="grid grid-cols-2 gap-4 items-start">
                 <div className="grid gap-2">
                   <Label htmlFor="edit-firstName" className={editState.errors?.firstName ? 'text-destructive' : ''}>First Name <span className="text-red-500 ml-0.5">*</span></Label>
@@ -105,15 +130,18 @@ export function EditUserDialog({
               </div>
               <UserRolesForm
                 roles={roles}
-                selectedRoleIds={editState.data?.roleIds ?? currentUser.roles.map(ur => ur.role.id)}
+                selectedRoleIds={selectedRoleIds}
                 errors={editState.errors?.roleIds}
                 idPrefix="edit-user"
+                onRoleChange={setSelectedRoleIds}
               />
 
               <RolePermissionsForm
                 allPermissions={allPermissions}
                 selectedPermissionIds={editState.data?.permissionIds ?? currentUser.permissions.map(p => p.permissionId)}
                 idPrefix="edit-user"
+                rolesWithPermissions={rolesWithPermissions}
+                selectedRoleIds={selectedRoleIds}
               />
             </div>
           )}

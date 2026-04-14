@@ -252,7 +252,7 @@ export const UserManagementRepo = {
         }
       }
 
-      return tx.user.update({
+      const updatedUser = await tx.user.update({
         where: { id },
         data: userData,
         include: {
@@ -268,6 +268,13 @@ export const UserManagementRepo = {
           },
         },
       });
+
+      // Invalidate all sessions for this user so they get fresh permissions on next login
+      await tx.session.deleteMany({
+        where: { userId: id },
+      });
+
+      return updatedUser;
     });
   },
 

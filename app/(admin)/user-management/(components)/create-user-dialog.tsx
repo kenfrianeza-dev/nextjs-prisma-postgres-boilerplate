@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import {
@@ -19,6 +20,16 @@ import { RolePermissionsForm } from './role-permissions-form';
 import { UserRolesForm } from './user-roles-form';
 import type { UserActionState } from '../users/action';
 
+type RoleWithPermissions = {
+  id: string;
+  name: string;
+  permissions: {
+    permission: {
+      id: string;
+    };
+  }[];
+};
+
 interface CreateUserDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -27,6 +38,7 @@ interface CreateUserDialogProps {
   isCreatePending: boolean;
   roles: { id: string; name: string }[];
   allPermissions: { id: string; action: string; resource: string; module: string | null; description: string | null }[];
+  rolesWithPermissions: RoleWithPermissions[];
 }
 
 export function CreateUserDialog({
@@ -37,7 +49,10 @@ export function CreateUserDialog({
   isCreatePending,
   roles,
   allPermissions,
+  rolesWithPermissions,
 }: CreateUserDialogProps) {
+  const [selectedRoleIds, setSelectedRoleIds] = useState<string[]>(createState.data?.roleIds ?? []);
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -73,14 +88,17 @@ export function CreateUserDialog({
             </div>
             <UserRolesForm
               roles={roles}
-              selectedRoleIds={createState.data?.roleIds}
+              selectedRoleIds={selectedRoleIds}
               errors={createState.errors?.roleIds}
               idPrefix="create-user"
+              onRoleChange={setSelectedRoleIds}
             />
             <RolePermissionsForm 
               allPermissions={allPermissions} 
               selectedPermissionIds={createState.data?.permissionIds}
               idPrefix="create-user"
+              rolesWithPermissions={rolesWithPermissions}
+              selectedRoleIds={selectedRoleIds}
             />
           </div>
           <DialogFooter>
