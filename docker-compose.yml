@@ -1,11 +1,11 @@
 services:
-  loms-app:
-    container_name: loms-app
+  app:
+    container_name: app
     build: .
     ports:
-      - "3001:3000"
+      - "3000:3000"
     depends_on:
-      loms-db:
+      db:
         condition: service_healthy
     environment:
       NODE_ENV: development
@@ -16,16 +16,16 @@ services:
       - pnpm_store:/root/.local/share/pnpm
     command: sh -c "pnpm install && npx prisma generate && pnpm dev"
 
-  loms-db:
+  db:
     image: postgres:18
-    container_name: loms-db
+    container_name: postgres-db
     restart: always
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: homestead
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:  
       - postgres_data:/var/lib/postgresql
     healthcheck:
