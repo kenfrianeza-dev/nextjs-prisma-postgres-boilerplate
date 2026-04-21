@@ -1,7 +1,8 @@
 "use server";
 
 import { deleteSession } from "@/lib/auth";
-import { redirect } from "next/navigation";import { LoginFormSchema, FormState } from "@/lib/definitions";
+import { redirect } from "next/navigation";
+import { LoginFormSchema, FormState } from "@/lib/definitions";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/password";
 import { createSession } from "@/lib/auth";
@@ -23,7 +24,6 @@ export async function login(state: FormState, formData: FormData) {
   }
 
   const { email, password } = validatedFields.data;
-
   const user = await prisma.user.findUnique({
     where: { email },
   });
