@@ -6,6 +6,7 @@ import type { UserActionState } from '../action';
 import type { RoleOption, PermissionOption, RoleWithPermissions } from '../_types';
 import type { Table } from '@tanstack/react-table';
 import type { UserWithRoles } from '../_types';
+import { Search } from 'lucide-react';
 
 interface UsersToolbarProps {
   table: Table<UserWithRoles>;
@@ -37,14 +38,17 @@ export function UsersToolbar({
 }: UsersToolbarProps) {
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-      <Input
-        placeholder="🔍 Search a user ..."
-        value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-        onChange={(event) =>
-          table.getColumn('name')?.setFilterValue(event.target.value)
-        }
-        className="w-full sm:w-auto"
-      />
+      <div className="relative w-48">
+        <Search className="absolute left-2 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+        <Input
+          placeholder="Search a user ..."
+          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+          onChange={(event) =>
+            table.getColumn('name')?.setFilterValue(event.target.value)
+          }
+          className="w-full sm:w-auto pl-8 h-8 text-xs"
+        />
+      </div>
       {canCreate && (
         <CreateUserDialog
           isOpen={isCreateOpen}
