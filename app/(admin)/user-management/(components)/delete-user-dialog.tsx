@@ -11,14 +11,7 @@ import {
 } from '@/app/components/ui/dialog';
 import { Spinner } from '@/app/components/ui/spinner';
 import { Avatar, AvatarFallback } from '@/app/components/ui/avatar';
-
-type UserWithRoles = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  isActive: boolean;
-};
+import type { UserWithRoles } from '../users/_types';
 
 interface DeleteUserDialogProps {
   isOpen: boolean;

@@ -17,42 +17,7 @@ import { ScrollArea } from '@/app/components/ui/scroll-area';
 import { RolePermissionsForm } from './role-permissions-form';
 import { UserRolesForm } from './user-roles-form';
 import type { UserActionState } from '../users/action';
-
-type UserWithRoles = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  isActive: boolean;
-  roles: {
-    role: {
-      id: string;
-      name: string;
-    };
-  }[];
-  permissions: {
-    id: string;
-    userId: string;
-    permissionId: string;
-    permission: {
-      id: string;
-      action: string;
-      resource: string;
-      module: string | null;
-      description: string | null;
-    };
-  }[];
-};
-
-type RoleWithPermissions = {
-  id: string;
-  name: string;
-  permissions: {
-    permission: {
-      id: string;
-    };
-  }[];
-};
+import type { UserWithRoles, RoleWithPermissions } from '../users/_types';
 
 interface EditUserDialogProps {
   isOpen: boolean;

@@ -19,16 +19,7 @@ import { ScrollArea } from '@/app/components/ui/scroll-area';
 import { RolePermissionsForm } from './role-permissions-form';
 import { UserRolesForm } from './user-roles-form';
 import type { UserActionState } from '../users/action';
-
-type RoleWithPermissions = {
-  id: string;
-  name: string;
-  permissions: {
-    permission: {
-      id: string;
-    };
-  }[];
-};
+import type { RoleWithPermissions } from '../users/_types';
 
 interface CreateUserDialogProps {
   isOpen: boolean;
