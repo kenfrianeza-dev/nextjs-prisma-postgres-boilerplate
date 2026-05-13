@@ -48,7 +48,7 @@ export function CreateUserDialog({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button className="w-full sm:w-auto">
-          <Plus className="mr-2 h-4 w-4" /> Create User
+          <Plus className="h-4 w-4" /> Create User
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">

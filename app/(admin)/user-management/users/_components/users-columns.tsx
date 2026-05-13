@@ -85,8 +85,7 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
         const isActive = row.getValue('isActive') as boolean;
         return (
           <Badge
-            variant={isActive ? 'default' : 'outline'}
-            className={isActive ? '' : 'text-muted-foreground'}
+            variant={isActive ? 'active' : 'inactive'}
           >
             {isActive ? 'Active' : 'Inactive'}
           </Badge>

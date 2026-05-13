@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '@/app/components/ui';
  */
 export function ReadOnlyAlert() {
   return (
-    <Alert variant="warning" className="text-xs w-fit">
+    <Alert variant="warning" className="text-xs w-fit bg-amber-50/10 dark:bg-transparent">
       <AlertTriangleIcon />
       <AlertDescription>
         Read-only. You don&apos;t have permission to update this.

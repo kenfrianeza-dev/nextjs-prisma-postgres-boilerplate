@@ -38,7 +38,7 @@ export function UsersToolbar({
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
       <Input
-        placeholder="Search user ..."
+        placeholder="🔍 Search a user ..."
         value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
         onChange={(event) =>
           table.getColumn('name')?.setFilterValue(event.target.value)

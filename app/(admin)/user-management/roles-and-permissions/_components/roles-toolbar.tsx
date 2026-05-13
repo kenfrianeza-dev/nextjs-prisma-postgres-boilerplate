@@ -34,7 +34,7 @@ export function RolesToolbar({
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
       <Input
-        placeholder="Search role ..."
+        placeholder="🔍 Search a role ..."
         value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
         onChange={(event) =>
           table.getColumn('name')?.setFilterValue(event.target.value)
