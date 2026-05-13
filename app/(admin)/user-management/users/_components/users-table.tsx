@@ -66,7 +66,7 @@ export function UsersTable({ table, columnCount }: UsersTableProps) {
               <TableRow>
                 <TableCell
                   colSpan={columnCount}
-                  className="h-24 text-center text-muted-foreground"
+                  className="h-[555px] text-center text-muted-foreground"
                 >
                   No users found.
                 </TableCell>
