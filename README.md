@@ -60,12 +60,16 @@ cd nextjs-prisma-postgres-boilerplate
 ```
 
 #### Step 2: Create Environment Variables
-Create a `.env.local` file in the root directory:
+Create a `.env` file in the root directory:
+
+Use this as a reference:
 
 ```env
 DATABASE_URL="postgresql://root:secret@db:5432/homestead"
 NODE_ENV="development"
 ```
+
+or copy the `.env.example` file to `.env`:
 
 #### Step 3: Build the Docker Image
 ```bash
@@ -78,7 +82,7 @@ This command will:
 
 #### Step 4: Start the Application with Docker Compose
 ```bash
-docker compose up -d
+docker compose up
 ```
 
 This command will:
@@ -356,7 +360,14 @@ lsof -ti:3000 | xargs kill -9
 
 ### Prisma Client Not Generated
 ```bash
-pnpm prisma generate
+docker exec -it app pnpm prisma generate
+```
+
+### Database Tables Missing (PrismaClientKnownRequestError)
+If you see an error like `The table public.User does not exist in the current database.`, the database migrations haven't run.
+To fix this while using Docker, run:
+```bash
+docker exec -it app pnpm prisma migrate dev
 ```
 
 ### Docker Issues
