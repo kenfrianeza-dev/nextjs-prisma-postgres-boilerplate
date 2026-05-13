@@ -16,14 +16,7 @@ import { Label } from '@/app/components/ui/label';
 import { Spinner } from '@/app/components/ui/spinner';
 import { RolePermissionsForm } from './role-permissions-form';
 import type { RoleActionState } from '../roles-and-permissions/action';
-
-type Permission = {
-  id: string;
-  action: string;
-  resource: string;
-  module: string | null;
-  description: string | null;
-};
+import type { Permission } from '../roles-and-permissions/_types';
 
 interface CreateRoleDialogProps {
   isOpen: boolean;

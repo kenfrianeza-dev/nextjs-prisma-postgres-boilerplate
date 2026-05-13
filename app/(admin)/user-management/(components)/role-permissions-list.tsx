@@ -1,14 +1,7 @@
 'use client';
 
 import { Badge } from '@/app/components/ui/badge';
-
-type Permission = {
-  id: string;
-  action: string;
-  resource: string;
-  module: string | null;
-  description: string | null;
-};
+import type { Permission } from '../roles-and-permissions/_types';
 
 interface RolePermissionsListProps {
   permissions: {

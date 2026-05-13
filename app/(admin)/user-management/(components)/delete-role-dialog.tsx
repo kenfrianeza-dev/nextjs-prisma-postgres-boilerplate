@@ -11,23 +11,7 @@ import {
   DialogTitle,
 } from '@/app/components/ui/dialog';
 import { Spinner } from '@/app/components/ui/spinner';
-
-type Permission = {
-  id: string;
-  action: string;
-  resource: string;
-  module: string | null;
-  description: string | null;
-};
-
-type RoleWithPermissions = {
-  id: string;
-  name: string;
-  description: string | null;
-  permissions: {
-    permission: Permission;
-  }[];
-};
+import type { Permission, RoleWithPermissions } from '../roles-and-permissions/_types';
 
 interface DeleteRoleDialogProps {
   isOpen: boolean;
