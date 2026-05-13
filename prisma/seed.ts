@@ -18,6 +18,9 @@ async function main() {
       case "settings-seeder":
         await seeders.seedSystemSettings(prisma);
         break;
+      case "user-stress-seeder":
+        await seeders.seedUserStress(prisma);
+        break;
       default:
         console.error(`❌ Unknown seeder module: ${targetModule}`);
         process.exit(1);

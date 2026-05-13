@@ -6,6 +6,14 @@ import { hashPassword } from "@/lib/password";
 export const UserManagementService = {
   /**
    * Get all users.
+   *
+   * 🏛️ ARCHITECTURE TODO: Current implementation fetches ALL users for client-side
+   * pagination and filtering via TanStack Table. This is optimal for small scale (< 1000 users).
+   *
+   * When system scales/grows, refactor this method to support server-side pagination:
+   *   - Add params: `options: { page: number; limit: number; search?: string; orderBy?: string }`
+   *   - Pass options downstream to repository for Prisma's `take`, `skip`, and `where` filters.
+   *   - Return metadata: `{ users: User[], totalCount: number }`
    */
   async getUsers(userPermissions: string[]) {
     if (!UserManagementPolicy.viewUsers(userPermissions)) {
