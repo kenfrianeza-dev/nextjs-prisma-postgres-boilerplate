@@ -20,7 +20,7 @@ export function SettingsList({ category, canUpdate, onSave }: SettingsListProps)
         title={category.name}
         description={category.description || ''}
       />
-      <div className="grid gap-4">
+      <div className="grid gap-4 pb-4">
         {category.settings.map((setting) => (
           <SettingCard
             key={setting.id}

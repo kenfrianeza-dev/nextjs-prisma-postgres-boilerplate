@@ -54,10 +54,16 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
       header: 'Roles',
       cell: ({ row }) => {
         const userRoles = row.original.roles;
+        // Filter out duplicate roles by id (e.g. if multiple assignments exist with different scopes)
+        const uniqueRoles = userRoles.filter(
+          (ur, index, self) =>
+            self.findIndex((item) => item.role.id === ur.role.id) === index
+        );
+
         return (
           <div className="flex flex-wrap gap-1">
-            {userRoles.length > 0 ? (
-              userRoles.map((ur) => (
+            {uniqueRoles.length > 0 ? (
+              uniqueRoles.map((ur) => (
                 <Badge key={ur.role.id} variant="secondary" className="font-normal">
                   {ur.role.name}
                 </Badge>

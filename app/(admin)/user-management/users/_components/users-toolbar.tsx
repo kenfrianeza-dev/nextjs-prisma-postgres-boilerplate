@@ -37,8 +37,8 @@ export function UsersToolbar({
   rolesWithPermissions,
 }: UsersToolbarProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div className="relative w-48">
+    <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="relative w-full sm:w-md">
         <Search className="absolute left-2 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
         <Input
           placeholder="Search a user ..."
@@ -46,7 +46,7 @@ export function UsersToolbar({
           onChange={(event) =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="w-full sm:w-auto pl-8 h-8 text-xs"
+          className="w-full pl-8 h-8 text-xs"
         />
       </div>
       {canCreate && (

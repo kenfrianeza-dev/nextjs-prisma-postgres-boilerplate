@@ -5,6 +5,7 @@ import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 import { ScrollArea } from '@/app/components/ui/scroll-area';
 import { Search } from 'lucide-react';
+import { truncateString } from '@/app/lib/utils';
 
 interface Role {
   id: string;
@@ -51,7 +52,7 @@ export function UserRolesForm({ roles, selectedRoleIds, errors, idPrefix, onRole
           />
         </div>
       </div>
-      <ScrollArea className="h-[100px] border rounded-md p-2">
+      {filteredRoles.length > 0 ? <ScrollArea className="h-[100px] border rounded-md p-2">
         <div className={`grid grid-cols-2 gap-4 p-2 ${errors ? 'border-destructive' : ''}`}>
           {filteredRoles.map((role) => (
             <div key={role.id} className="flex items-center space-x-2">
@@ -69,13 +70,13 @@ export function UserRolesForm({ roles, selectedRoleIds, errors, idPrefix, onRole
               </Label>
             </div>
           ))}
-          {filteredRoles.length === 0 && (
-            <div className="col-span-2 py-4 text-center text-xs text-muted-foreground">
-              No roles found matching &quot;{search}&quot;
-            </div>
-          )}
+
         </div>
-      </ScrollArea>
+      </ScrollArea> : <div className="w-full flex flex-col items-center justify-center h-[100px] text-muted-foreground border rounded-md p-2">
+        <Search className="h-8 w-8 mb-2 opacity-20" />
+        <p className="text-sm">No roles found matching &quot;{truncateString(search, 32)}&quot;</p>
+      </div>}
+
       {errors && <p className="text-xs text-destructive">{errors[0]}</p>}
     </div>
   );

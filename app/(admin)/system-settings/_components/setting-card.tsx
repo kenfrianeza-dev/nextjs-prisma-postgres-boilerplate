@@ -44,7 +44,7 @@ export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
   const isSaving = savingKey === setting.key;
 
   return (
-    <Card className="shadow-none">
+    <Card className="shadow-none rounded-md border border-l-4 border-t border-b border-r bg-secondary/10 hover:bg-secondary/25 transition-colors">
       <CardHeader>
         <CardTitle className="text-base">
           {setting.description || setting.key}
