@@ -37,8 +37,6 @@ const UsersPageSkeleton = () => (
 const UsersPage = async () => {
   const session = await verifySession();
   if (!session) redirect('/');
-  console.log("Active session:");
-  console.log(session);
 
   try {
     const [users, rolesData, allPermissions] = await Promise.all([
