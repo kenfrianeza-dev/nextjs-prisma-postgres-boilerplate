@@ -88,13 +88,21 @@ docker compose up
 This command will:
 - Start a PostgreSQL database container on port 5432
 - Start the Next.js application container on port 3000 (using the pre-built image)
-- Automatically run `pnpm install` (if needed)
+- Automatically run `pnpm install`, generate the Prisma client, and apply database migrations
 - Start the development server with hot-reload
 
-#### Step 5: Access the Application
+#### Step 5: Seed the Database (First Run Only)
+
+Because database seeding is no longer run automatically on startup to improve performance, you will need to run it manually when setting up the project for the first time:
+
+```bash
+docker compose exec app pnpm prisma db seed
+```
+
+#### Step 6: Access the Application
 Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
 
-#### Step 6: Stop the Application
+#### Step 7: Stop the Application
 ```bash
 docker compose down
 ```
