@@ -9,7 +9,7 @@ async function SystemSettingsPage() {
   if (!session) redirect('/');
 
   try {
-    const categories = await SystemSettingsService.getCategorizedSettings(session.permissions);
+    const categories = await SystemSettingsService.getAllCategoriesWithSettings(session.permissions);
     
     return (
       <SettingsClient 

@@ -10,6 +10,7 @@ services:
     environment:
       NODE_ENV: development
       DATABASE_URL: ${DATABASE_URL}
+      PNPM_CONFIG_STRICT_DEP_BUILDS: "false"
       CI: "true" # pnpm needs this in non-interactive environments
     volumes:
       - .:/app

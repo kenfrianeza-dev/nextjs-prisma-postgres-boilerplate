@@ -13,7 +13,7 @@ const icons = [
 
 export function DashboardStats() {
   const { data, isLoading } = useDashboardStore();
-
+  
   if (isLoading || !data) {
     return (
       <div className="grid auto-rows-min gap-4 sm:grid-cols-2 md:grid-cols-4">
@@ -27,7 +27,7 @@ export function DashboardStats() {
   return (
     <div className="grid auto-rows-min gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {data.stats.map((stat, i) => (
-        <Card key={i} className="border-t-4" style={{ borderTopColor: i === 0 ? '#10b981' : i === 1 ? '#3b82f6' : i === 2 ? '#f59e0b' : '#f43f5e' }}>
+        <Card key={i} className="border-t-4 hover:bg-muted/25 transition" style={{ borderTopColor: i === 0 ? '#10b981' : i === 1 ? '#3b82f6' : i === 2 ? '#f59e0b' : '#f43f5e' }}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {stat.title}

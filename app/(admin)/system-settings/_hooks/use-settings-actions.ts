@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { toast } from 'sonner';
-import { saveSetting } from '@/server/actions/settings.actions';
+import { saveSetting } from '@(admin)/system-settings/action';
 import { useSettingsStore } from '../_store/use-settings-store';
 
 /**

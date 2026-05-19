@@ -22,6 +22,8 @@
       "@/*": ["./*"],
       "@lib/prisma": ["./lib/prisma.ts"],
       "@prisma/generated/client": ["./prisma/generated/prisma/client.ts"],
+      "@(admin)/*": ["./app/(admin)/*"],
+      "@(public)/*": ["./app/(public)/*"],
     }
   },
   "include": [

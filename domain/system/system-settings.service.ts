@@ -6,7 +6,7 @@ export const SystemSettingsService = {
   /**
    * Get all settings categorized, filtered by user permissions.
    */
-  async getCategorizedSettings(userPermissions: string[]) {
+  async getAllCategoriesWithSettings(userPermissions: string[]) {
     if (!SystemSettingsPolicy.viewSettings(userPermissions)) {
       throw AppError.forbidden("You do not have permission to view system settings.");
     }
