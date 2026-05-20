@@ -12,7 +12,7 @@ import {
   BreadcrumbSeparator,
 } from "@/app/_components/ui/breadcrumb"
 import { MODULES } from "@/app/config/modules-constants"
-import { formatLabel } from "@/app/lib/utils"
+import { formatLabel } from "@/app/utils"
 
 export function DynamicBreadcrumbs() {
   const pathname = usePathname()

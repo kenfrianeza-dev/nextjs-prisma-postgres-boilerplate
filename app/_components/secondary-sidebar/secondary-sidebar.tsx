@@ -1,5 +1,5 @@
 import { PermissionEngine } from "@/domain/shared/permission.engine";
-import { cn } from "@/app/lib/utils";
+import { cn } from "@/app/utils";
 import { Button } from "@/app/_components/ui/button";
 import type { MenuItems } from "@/app/_components/secondary-sidebar/_types";
 

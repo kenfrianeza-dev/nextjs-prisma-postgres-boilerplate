@@ -1,2 +1,2 @@
-export { Container } from "./container";
-export { ContainerHeader } from "./container-header";
+export { Container } from "@/app/_components/container/container";
+export { ContainerHeader } from "@/app/_components/container/container-header";

@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { cn } from "@/app/utils"
 import { SecondarySidebar } from "@/app/_components/secondary-sidebar/secondary-sidebar";
 import { SecondarySidebarTrigger } from "@/app/_components/secondary-sidebar/secondary-sidebar-trigger";
-import { cn } from "@/app/lib/utils"
 import type { MenuItems } from "@/app/_components/secondary-sidebar/_types";
 import type { ContainerVariant } from "@/app/_components/container/_types";
 

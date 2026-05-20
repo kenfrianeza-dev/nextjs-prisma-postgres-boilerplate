@@ -5,7 +5,7 @@ import { Search } from 'lucide-react';
 import { Input } from '@/app/_components/ui/input';
 import { Label } from '@/app/_components/ui/label';
 import { ScrollArea } from '@/app/_components/ui/scroll-area';
-import { truncateString } from '@/app/lib/utils';
+import { truncateString } from '@/app/utils';
 
 interface Role {
   id: string;

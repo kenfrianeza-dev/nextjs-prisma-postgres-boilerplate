@@ -1,1 +1,1 @@
-export { DynamicBreadcrumbs } from "./dynamic-breadcrumbs";
+export { DynamicBreadcrumbs } from "@/app/_components/header/dynamic-breadcrumbs";

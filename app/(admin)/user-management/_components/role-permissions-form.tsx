@@ -6,7 +6,7 @@ import { Input } from '@/app/_components/ui/input';
 import { Label } from '@/app/_components/ui/label';
 import { ScrollArea } from '@/app/_components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/app/_components/ui/collapsible';
-import { truncateString, cn } from '@/app/lib/utils';
+import { truncateString, cn } from '@/app/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/_components/ui/tooltip';
 
 type Permission = {
