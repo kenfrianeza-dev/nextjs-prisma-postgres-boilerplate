@@ -12,16 +12,15 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { UserManagementPolicy } from '@/domain/user-management/user-management.policy';
-import { EditRoleDialog } from '@/app/(admin)/user-management/(components)/edit-role-dialog';
-import { DeleteRoleDialog } from '@/app/(admin)/user-management/(components)/delete-role-dialog';
-
-import type { RolesClientProps } from './_types';
-import { useRolesStore } from './_store/use-roles-store';
-import { useRoleActions } from './_hooks/use-role-actions';
-import { getRolesColumns } from './_components/roles-columns';
-import { RolesToolbar } from './_components/roles-toolbar';
-import { RolesTable } from './_components/roles-table';
-import { RolesPagination } from './_components/roles-pagination';
+import { EditRoleDialog } from '@/app/(admin)/user-management/_components/edit-role-dialog';
+import { DeleteRoleDialog } from '@/app/(admin)/user-management/_components/delete-role-dialog';
+import { useRolesStore } from '@/app/(admin)/user-management/roles-and-permissions/_store/use-roles-store';
+import { useRoleActions } from '@/app/(admin)/user-management/roles-and-permissions/_hooks/use-role-actions';
+import { getRolesColumns } from '@/app/(admin)/user-management/roles-and-permissions/_components/roles-columns';
+import { RolesToolbar } from '@/app/(admin)/user-management/roles-and-permissions/_components/roles-toolbar';
+import { RolesTable } from '@/app/(admin)/user-management/roles-and-permissions/_components/roles-table';
+import { RolesPagination } from '@/app/(admin)/user-management/roles-and-permissions/_components/roles-pagination';
+import type { RolesClientProps } from '@/app/(admin)/user-management/roles-and-permissions/_types';
 
 /**
  * Client-side orchestrator for the Roles & Permissions page.

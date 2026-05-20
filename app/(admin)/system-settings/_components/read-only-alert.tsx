@@ -1,7 +1,7 @@
 'use client';
 
 import { AlertTriangleIcon } from 'lucide-react';
-import { Alert, AlertDescription } from '@/app/components/ui';
+import { Alert, AlertDescription } from '@/app/_components/ui';
 
 /**
  * Small inline alert shown when the user lacks update permissions

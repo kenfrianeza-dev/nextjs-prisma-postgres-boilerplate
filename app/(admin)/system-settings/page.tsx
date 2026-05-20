@@ -1,6 +1,6 @@
 import { verifySession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import SettingsClient from './settings-client';
+import SettingsClient from '@/app/(admin)/system-settings/settings-client';
 import { SystemSettingsService } from '@/domain/system/system-settings.service';
 import { ErrorCode, isAppErrorCode } from '@/lib/errors';
 

@@ -1,12 +1,10 @@
 'use client';
 
-import { Input } from '@/app/components/ui/input';
-import { CreateRoleDialog } from '@/app/(admin)/user-management/(components)/create-role-dialog';
-import type { RoleActionState } from '../action';
-import type { Permission } from '../_types';
-import type { Table } from '@tanstack/react-table';
-import type { RoleWithPermissions } from '../_types';
 import { Search } from 'lucide-react';
+import { Input } from '@/app/_components/ui/input';
+import { CreateRoleDialog } from '@/app/(admin)/user-management/_components/create-role-dialog';
+import type { Table } from '@tanstack/react-table';
+import type { Permission, RoleActionState, RoleWithPermissions } from '@/app/(admin)/user-management/roles-and-permissions/_types';
 
 interface RolesToolbarProps {
   table: Table<RoleWithPermissions>;

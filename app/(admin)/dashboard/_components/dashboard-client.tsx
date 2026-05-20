@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import { DashboardStats } from './dashboard-stats';
-import { DashboardChart } from './dashboard-chart';
-import { useDashboardStore } from '../_store/use-dashboard-store';
-import type { DashboardData } from '../_types';
+import { DashboardStats } from '@/app/(admin)/dashboard/_components/dashboard-stats';
+import { DashboardChart } from '@/app/(admin)/dashboard/_components/dashboard-chart';
+import { useDashboardStore } from '@/app/(admin)/dashboard/_store/use-dashboard-store';
+import type { DashboardData } from '@/app/(admin)/dashboard/_types';
 
 interface DashboardClientProps {
   initialData: DashboardData;

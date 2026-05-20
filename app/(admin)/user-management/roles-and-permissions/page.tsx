@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Container, ContainerHeader } from "@/app/components/container";
-import { verifySession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { UserManagementService } from '@/domain/user-management/user-management.service';
+import { verifySession } from '@/lib/auth';
 import { ErrorCode, isAppErrorCode } from '@/lib/errors';
-import { RolesClient } from './roles-client';
-import { Skeleton } from '@/app/components/ui/skeleton';
+import { UserManagementService } from '@/domain/user-management/user-management.service';
+import { Container, ContainerHeader } from "@/app/_components/container";
+import { Skeleton } from '@/app/_components/ui/skeleton';
+import { RolesClient } from '@/app/(admin)/user-management/roles-and-permissions/roles-client';
 
 const RolesPageSkeleton = () => (
   <div className="space-y-4">

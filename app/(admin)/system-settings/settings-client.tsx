@@ -2,16 +2,15 @@
 
 import { useEffect } from 'react';
 import { Settings } from 'lucide-react';
-import { Container } from '@/app/components/container';
+import { Container } from '@/app/_components/container';
 import { SystemSettingsPolicy } from '@/domain/system/system-settings.policy';
-import type { MenuItems } from '@/app/components/secondary-sidebar/secondary-sidebar';
-
-import type { SettingsClientProps } from './_types';
-import { useSettingsStore } from './_store/use-settings-store';
-import { useSettingsActions } from './_hooks/use-settings-actions';
-import { ICON_MAP } from './_components/settings-icon-map';
-import { SettingsList } from './_components/settings-list';
-import { SettingsEmptyState } from './_components/settings-empty-state';
+import { useSettingsStore } from '@/app/(admin)/system-settings/_store/use-settings-store';
+import { useSettingsActions } from '@/app/(admin)/system-settings/_hooks/use-settings-actions';
+import { ICON_MAP } from '@/app/(admin)/system-settings/_components/settings-icon-map';
+import { SettingsList } from '@/app/(admin)/system-settings/_components/settings-list';
+import { SettingsEmptyState } from '@/app/(admin)/system-settings/_components/settings-empty-state';
+import type { MenuItems } from '@/app/_components/secondary-sidebar/_types';
+import type { SettingsClientProps } from '@/app/(admin)/system-settings/_types';
 
 /**
  * Client-side orchestrator for the System Settings page.

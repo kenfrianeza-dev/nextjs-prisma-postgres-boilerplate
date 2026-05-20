@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/app/_components/ui/button';
 import type { Table } from '@tanstack/react-table';
-import type { RoleWithPermissions } from '../_types';
+import type { RoleWithPermissions } from '@/app/(admin)/user-management/roles-and-permissions/_types';
 
 interface RolesPaginationProps {
   table: Table<RoleWithPermissions>;

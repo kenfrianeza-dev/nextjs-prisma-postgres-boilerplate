@@ -12,16 +12,15 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { UserManagementPolicy } from '@/domain/user-management/user-management.policy';
-import { EditUserDialog } from '@/app/(admin)/user-management/(components)/edit-user-dialog';
-import { DeleteUserDialog } from '@/app/(admin)/user-management/(components)/delete-user-dialog';
-
-import type { UsersClientProps } from './_types';
-import { useUsersStore } from './_store/use-users-store';
-import { useUserActions } from './_hooks/use-user-actions';
-import { getUserColumns } from './_components/users-columns';
-import { UsersToolbar } from './_components/users-toolbar';
-import { UsersTable } from './_components/users-table';
-import { UsersPagination } from './_components/users-pagination';
+import { EditUserDialog } from '@/app/(admin)/user-management/_components/edit-user-dialog';
+import { DeleteUserDialog } from '@/app/(admin)/user-management/_components/delete-user-dialog';
+import { useUsersStore } from '@/app/(admin)/user-management/users/_store/use-users-store';
+import { useUserActions } from '@/app/(admin)/user-management/users/_hooks/use-user-actions';
+import { getUserColumns } from '@/app/(admin)/user-management/users/_components/users-columns';
+import { UsersToolbar } from '@/app/(admin)/user-management/users/_components/users-toolbar';
+import { UsersTable } from '@/app/(admin)/user-management/users/_components/users-table';
+import { UsersPagination } from '@/app/(admin)/user-management/users/_components/users-pagination';
+import type { UsersClientProps } from '@/app/(admin)/user-management/users/_types';
 
 /**
  * Client-side orchestrator for the Users page.

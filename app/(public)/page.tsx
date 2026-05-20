@@ -1,7 +1,7 @@
-import { LoginForm } from "@/app/components";
-import { Separator } from "@/app/components/ui";
-import { verifySession } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { verifySession } from "@/lib/auth";
+import { LoginForm } from "@/app/_components";
+import { Separator } from "@/app/_components/ui";
 
 export default async function Home() {
   const session = await verifySession();

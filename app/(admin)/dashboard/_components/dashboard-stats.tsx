@@ -1,7 +1,7 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
-import { useDashboardStore } from '../_store/use-dashboard-store';
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/card';
+import { useDashboardStore } from '@/app/(admin)/dashboard/_store/use-dashboard-store';
 import { DollarSign, Users, CreditCard, Activity } from 'lucide-react';
 
 const icons = [

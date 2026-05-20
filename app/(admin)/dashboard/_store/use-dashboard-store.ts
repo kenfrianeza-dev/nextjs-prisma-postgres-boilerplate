@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { DashboardData } from '../_types';
+import type { DashboardData } from '@/app/(admin)/dashboard/_types';
 
 interface DashboardStore {
   data: DashboardData | null;

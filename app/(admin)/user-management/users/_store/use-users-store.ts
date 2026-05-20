@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { UserWithRoles } from '../_types';
+import type { UserWithRoles } from '@/app/(admin)/user-management/users/_types';
 
 /**
  * Zustand store for the Users page UI state.

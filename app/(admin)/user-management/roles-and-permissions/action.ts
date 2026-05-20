@@ -1,9 +1,11 @@
 'use server';
 
-import { verifySession } from "@/lib/auth";
-import { UserManagementService } from "@/domain/user-management/user-management.service";
 import { revalidatePath } from "next/cache";
 import { z } from 'zod';
+import { verifySession } from "@/lib/auth";
+import { UserManagementService } from "@/domain/user-management/user-management.service";
+import type { RoleActionState } from "@/app/(admin)/user-management/roles-and-permissions/_types";
+
 
 const RoleSchema = z.object({
   name: z.string().min(2, 'Role name must be at least 2 characters'),
@@ -11,20 +13,6 @@ const RoleSchema = z.object({
   permissionIds: z.array(z.string()).optional(),
 });
 
-export type RoleActionState = {
-  errors?: {
-    name?: string[];
-    description?: string[];
-    permissionIds?: string[];
-  };
-  data?: {
-    name?: string;
-    description?: string;
-    permissionIds?: string[];
-  };
-  message?: string | null;
-  success?: boolean;
-};
 
 export async function createRoleAction(prevState: RoleActionState, formData: FormData): Promise<RoleActionState> {
   const session = await verifySession();

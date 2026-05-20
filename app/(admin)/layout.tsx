@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { AppSidebar } from "@/app/components/navigation";
-import { DynamicBreadcrumbs } from "@/app/components/header";
+import { AppSidebar } from "@/app/_components/navigation";
+import { DynamicBreadcrumbs } from "@/app/_components/header";
 import { getAuthContext } from "@/lib/auth-context";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/app/components/ui/sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/app/_components/ui/sidebar";
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
   const auth = await getAuthContext();

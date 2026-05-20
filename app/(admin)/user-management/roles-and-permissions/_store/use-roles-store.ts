@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { RoleWithPermissions } from '../_types';
+import type { RoleWithPermissions } from '@/app/(admin)/user-management/roles-and-permissions/_types';
 
 /**
  * Zustand store for the Roles & Permissions page UI state.

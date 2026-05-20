@@ -1,0 +1,1 @@
+export { SecondarySidebar } from "@/app/_components/secondary-sidebar/secondary-sidebar";

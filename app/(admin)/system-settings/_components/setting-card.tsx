@@ -6,10 +6,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/app/components/ui/card';
-import { Label } from '@/app/components/ui/label';
-import { Input } from '@/app/components/ui/input';
-import { Button } from '@/app/components/ui/button';
+} from '@/app/_components/ui/card';
+import { Label } from '@/app/_components/ui/label';
+import { Input } from '@/app/_components/ui/input';
+import { Button } from '@/app/_components/ui/button';
 import {
   Select,
   SelectContent,
@@ -18,11 +18,11 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/app/components/ui/select';
-import { Spinner } from '@/app/components/ui/spinner';
-import { ReadOnlyAlert } from './read-only-alert';
-import { useSettingsStore } from '../_store/use-settings-store';
-import type { Setting } from '../_types';
+} from '@/app/_components/ui/select';
+import { Spinner } from '@/app/_components/ui/spinner';
+import { ReadOnlyAlert } from '@/app/(admin)/system-settings/_components/read-only-alert';
+import { useSettingsStore } from '@/app/(admin)/system-settings/_store/use-settings-store';
+import type { Setting } from '@/app/(admin)/system-settings/_types';
 
 interface SettingCardProps {
   setting: Setting;

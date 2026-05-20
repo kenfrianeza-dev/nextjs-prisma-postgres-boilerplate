@@ -2,8 +2,8 @@
 
 import { useCallback } from 'react';
 import { toast } from 'sonner';
-import { saveSetting } from '@(admin)/system-settings/action';
-import { useSettingsStore } from '../_store/use-settings-store';
+import { saveSetting } from '@/app/(admin)/system-settings/action';
+import { useSettingsStore } from '@/app/(admin)/system-settings/_store/use-settings-store';
 
 /**
  * Custom hook that encapsulates the settings save action.

@@ -1,7 +1,7 @@
 'use client';
 
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/app/_components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +9,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/app/components/ui/dropdown-menu';
+} from '@/app/_components/ui/dropdown-menu';
 import { toast } from 'sonner';
-import { useRolesStore } from '../_store/use-roles-store';
-import type { RoleWithPermissions } from '../_types';
+import { useRolesStore } from '@/app/(admin)/user-management/roles-and-permissions/_store/use-roles-store';
+import type { RoleWithPermissions } from '@/app/(admin)/user-management/roles-and-permissions/_types';
 
 interface RoleActionsCellProps {
   role: RoleWithPermissions;

@@ -1,8 +1,8 @@
 'use client';
 
-import { ContainerHeader } from '@/app/components/container';
-import { SettingCard } from './setting-card';
-import type { Category } from '../_types';
+import { ContainerHeader } from '@/app/_components/container';
+import { SettingCard } from '@/app/(admin)/system-settings/_components/setting-card';
+import type { Category } from '@/app/(admin)/system-settings/_types';
 
 interface SettingsListProps {
   category: Category;

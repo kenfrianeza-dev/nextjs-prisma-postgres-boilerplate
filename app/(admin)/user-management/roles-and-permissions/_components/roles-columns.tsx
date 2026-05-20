@@ -2,10 +2,10 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, Shield } from 'lucide-react';
-import { Button } from '@/app/components/ui/button';
-import { RolePermissionsList } from '@/app/(admin)/user-management/(components)/role-permissions-list';
-import { RoleActionsCell } from './role-actions-cell';
-import type { RoleWithPermissions } from '../_types';
+import { Button } from '@/app/_components/ui/button';
+import { RolePermissionsList } from '@/app/(admin)/user-management/_components/role-permissions-list';
+import { RoleActionsCell } from '@/app/(admin)/user-management/roles-and-permissions/_components/role-actions-cell';
+import type { RoleWithPermissions } from '@/app/(admin)/user-management/roles-and-permissions/_types';
 
 /**
  * Build column definitions for the roles table.

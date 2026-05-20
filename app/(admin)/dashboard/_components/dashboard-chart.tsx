@@ -1,8 +1,8 @@
 'use client';
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from 'recharts';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
-import { useDashboardStore } from '../_store/use-dashboard-store';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/_components/ui/card';
+import { useDashboardStore } from '@/app/(admin)/dashboard/_store/use-dashboard-store';
 
 const COLORS = [
   '#011A8C',

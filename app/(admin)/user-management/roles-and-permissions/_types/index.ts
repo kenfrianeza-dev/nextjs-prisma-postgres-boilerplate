@@ -4,6 +4,23 @@
  * store, hook, and column definition imports from this single source.
  */
 
+// ─── Action States ───────────────────────────────────────────
+
+export type RoleActionState = {
+  errors?: {
+    name?: string[];
+    description?: string[];
+    permissionIds?: string[];
+  };
+  data?: {
+    name?: string;
+    description?: string;
+    permissionIds?: string[];
+  };
+  message?: string | null;
+  success?: boolean;
+};
+
 // ─── Domain Models ───────────────────────────────────────────
 
 export type Permission = {

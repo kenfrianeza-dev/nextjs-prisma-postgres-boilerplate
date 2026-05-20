@@ -11,9 +11,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/app/components/ui/table';
-import { ScrollArea } from '@/app/components/ui/scroll-area';
-import type { UserWithRoles } from '../_types';
+} from '@/app/_components/ui/table';
+import { ScrollArea } from '@/app/_components/ui/scroll-area';
+import type { UserWithRoles } from '@/app/(admin)/user-management/users/_types';
 
 interface UsersTableProps {
   table: TanstackTable<UserWithRoles>;

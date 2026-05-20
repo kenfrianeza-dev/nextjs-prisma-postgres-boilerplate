@@ -1,9 +1,9 @@
 'use server';
 
-import { verifySession } from "@/lib/auth";
-import { UserManagementService } from "@/domain/user-management/user-management.service";
 import { revalidatePath } from "next/cache";
 import { z } from 'zod';
+import { verifySession } from "@/lib/auth";
+import { UserManagementService } from "@/domain/user-management/user-management.service";
 
 const UserSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),

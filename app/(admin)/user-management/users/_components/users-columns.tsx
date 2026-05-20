@@ -2,11 +2,11 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
-import { Button } from '@/app/components/ui/button';
-import { Badge } from '@/app/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/app/components/ui/avatar';
-import { UserActionsCell } from './user-actions-cell';
-import type { UserWithRoles } from '../_types';
+import { Button } from '@/app/_components/ui/button';
+import { Badge } from '@/app/_components/ui/badge';
+import { Avatar, AvatarFallback } from '@/app/_components/ui/avatar';
+import { UserActionsCell } from '@/app/(admin)/user-management/users/_components/user-actions-cell';
+import type { UserWithRoles } from '@/app/(admin)/user-management/users/_types';
 
 /**
  * Build column definitions for the users table.

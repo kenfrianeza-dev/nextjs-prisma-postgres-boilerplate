@@ -1,15 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useCallback, useState } from 'react';
-import { useActionState } from 'react';
+import { useEffect, useMemo, useCallback, useState, useActionState } from 'react';
 import { toast } from 'sonner';
 import {
   createRoleAction,
   deleteRoleAction,
   updateRoleAction,
-  type RoleActionState,
-} from '../action';
-import { useRolesStore } from '../_store/use-roles-store';
+} from '@/app/(admin)/user-management/roles-and-permissions/action';
+import type { RoleActionState } from '@/app/(admin)/user-management/roles-and-permissions/_types';
+import { useRolesStore } from '@/app/(admin)/user-management/roles-and-permissions/_store/use-roles-store';
 
 const initialState: RoleActionState = {
   message: null,

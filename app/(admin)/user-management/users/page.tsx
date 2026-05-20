@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Container, ContainerHeader } from "@/app/components/container";
-import { verifySession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { verifySession } from '@/lib/auth';
+import { Container, ContainerHeader } from "@/app/_components/container";
 import { UserManagementService } from '@/domain/user-management/user-management.service';
 import { ErrorCode, isAppErrorCode } from '@/lib/errors';
-import { UsersClient } from './users-client';
-import { Skeleton } from '@/app/components/ui/skeleton';
+import { UsersClient } from '@/app/(admin)/user-management/users/users-client';
+import { Skeleton } from '@/app/_components/ui/skeleton';
 
 const UsersPageSkeleton = () => (
   <div className="space-y-4">

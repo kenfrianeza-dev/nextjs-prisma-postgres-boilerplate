@@ -1,15 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useCallback } from 'react';
-import { useActionState } from 'react';
+import { useEffect, useMemo, useCallback, useActionState } from 'react';
 import { toast } from 'sonner';
 import {
   createUserAction,
   deleteUserAction,
   updateUserAction,
   type UserActionState,
-} from '../action';
-import { useUsersStore } from '../_store/use-users-store';
+} from '@/app/(admin)/user-management/users/action';
+import { useUsersStore } from '@/app/(admin)/user-management/users/_store/use-users-store';
 
 const initialState: UserActionState = {
   message: null,
