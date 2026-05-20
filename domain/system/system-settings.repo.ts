@@ -8,9 +8,10 @@ export const SystemSettingsRepo = {
     return prisma.systemSettingCategory.findMany({
       include: {
         settings: {
-          orderBy: {
-            order: 'desc'
-          },
+          orderBy: [
+            { order: 'asc' },
+            { key: 'asc' },
+          ],
         },
       },
       orderBy: {

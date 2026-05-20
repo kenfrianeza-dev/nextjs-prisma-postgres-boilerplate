@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/card';
 import { useDashboardStore } from '@/app/(admin)/dashboard/_store/use-dashboard-store';
 import { DollarSign, Users, CreditCard, Activity } from 'lucide-react';
+import { cn } from '@/app/utils';
 
 const icons = [
   <DollarSign key="1" className="h-4 w-4 text-emerald-500" />,
@@ -13,6 +14,16 @@ const icons = [
 
 export function DashboardStats() {
   const { data, isLoading } = useDashboardStore();
+
+  const getBorderColor = (i: number) => {
+    switch (i) {
+      case 0: return 'border-t-emerald-500';
+      case 1: return 'border-t-blue-500';
+      case 2: return 'border-t-amber-500';
+      case 3: return 'border-t-rose-500';
+      default: return 'border-t-transparent';
+    }
+  }
   
   if (isLoading || !data) {
     return (
@@ -27,7 +38,10 @@ export function DashboardStats() {
   return (
     <div className="grid auto-rows-min gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {data.stats.map((stat, i) => (
-        <Card key={i} className="border-t-4 hover:bg-muted/25 transition" style={{ borderTopColor: i === 0 ? '#10b981' : i === 1 ? '#3b82f6' : i === 2 ? '#f59e0b' : '#f43f5e' }}>
+        <Card 
+          key={i} 
+          className={cn("border-t-4 hover:bg-accent/25 transition", getBorderColor(i))}
+        >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {stat.title}

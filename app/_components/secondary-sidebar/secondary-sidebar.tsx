@@ -28,7 +28,7 @@ export const SecondarySidebar = ({
                 variant={activeTab === item?.title ? "secondary" : "ghost"}
                 className={cn(
                   "w-full h-20 flex justify-start items-center gap-4 rounded-none px-4.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                  activeTab === item?.title && "bg-secondary/25"
+                  activeTab === item?.title && "bg-accent/50 dark:bg-accent/50 border-l-2 border-l-primary/50 dark:border-l-primary/50"
                 )}
                 onClick={() => onTabChange?.(item?.title)}
               >

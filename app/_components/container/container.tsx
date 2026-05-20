@@ -14,7 +14,7 @@ export const Container = ({
   activeTab,
   onTabChange,
   permissions,
-  variant = "default"
+  variant = "background"
 }: {
   children: React.ReactNode,
   menuItems?: MenuItems[],
@@ -31,20 +31,8 @@ export const Container = ({
     setIsMobileMenuOpen(false);
   };
 
-  const getContainerVariant = (variant: ContainerVariant) => {
-    switch (variant) {
-      case "background":
-        return "rounded-md m-2 bg-white dark:bg-slate-950";
-      case "default":
-        return "";
-      default:
-        return "";
-    }
-  };
-
   return (
-    // <div className="flex flex-col md:flex-row flex-1 w-full overflow-hidden">
-    <div className={cn(`flex flex-col md:flex-row flex-1 w-full overflow-hidden ${getContainerVariant(variant)}`)}>
+    <div className={cn(`flex flex-col md:flex-row flex-1 w-full overflow-hidden`, variant === "background" ? "bg-accent dark:bg-slate-900" : "")}>
 
       {/* Sidebar Content, The sidebar is hidden on mobile and shown on desktop, if it exists. */}
       {menuItems && (
@@ -76,8 +64,7 @@ export const Container = ({
       )}
 
       {/* Main Content */}
-      {/* <div className={cn("flex-1 overflow-y-auto p-4", className)}> */}
-      <div className={cn(`flex-1 overflow-y-auto p-4 ${getContainerVariant(variant)}`, className)}>
+      <div className={cn(`flex-1 overflow-y-auto p-4`, className, variant === "background" ? "rounded-md m-2 bg-white dark:bg-slate-950 border border-accent" : "")}>
         {children}
       </div>
     </div>
