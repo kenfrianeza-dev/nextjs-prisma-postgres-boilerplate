@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { Button } from '@/app/_components/ui/button';
 import { Badge } from '@/app/_components/ui/badge';
 import { Avatar, AvatarFallback } from '@/app/_components/ui/avatar';
@@ -26,7 +26,13 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
           className="-ml-4 hover:bg-transparent"
         >
           Name
-          <ArrowUpDown className="ml-2 h-3 w-3" />
+          {column.getIsSorted() === 'desc' ? (
+            <ArrowDown className="ml-2 h-3 w-3" />
+          ) : column.getIsSorted() === 'asc' ? (
+            <ArrowUp className="ml-2 h-3 w-3" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          )}
         </Button>
       ),
       cell: ({ row }) => {
@@ -51,7 +57,37 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
     },
     {
       accessorKey: 'roles',
-      header: 'Roles',
+      sortingFn: (rowA, rowB) => {
+        const getRolesStr = (roles: UserWithRoles['roles']) => {
+          if (!roles || roles.length === 0) return '';
+          const uniqueRoles = roles.filter(
+            (ur, index, self) =>
+              self.findIndex((item) => item.role.id === ur.role.id) === index
+          );
+          return uniqueRoles.map((ur) => ur.role.name).sort().join(', ');
+        };
+
+        const aStr = getRolesStr(rowA.original.roles);
+        const bStr = getRolesStr(rowB.original.roles);
+
+        return aStr.localeCompare(bStr);
+      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="-ml-4 hover:bg-transparent"
+        >
+          Role
+          {column.getIsSorted() === 'desc' ? (
+            <ArrowDown className="ml-2 h-3 w-3" />
+          ) : column.getIsSorted() === 'asc' ? (
+            <ArrowUp className="ml-2 h-3 w-3" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          )}
+        </Button>
+      ),
       cell: ({ row }) => {
         const userRoles = row.original.roles;
         // Filter out duplicate roles by id (e.g. if multiple assignments exist with different scopes)
@@ -84,7 +120,13 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
           className="-ml-4 hover:bg-transparent"
         >
           Status
-          <ArrowUpDown className="ml-2 h-3 w-3" />
+          {column.getIsSorted() === 'desc' ? (
+            <ArrowDown className="ml-2 h-3 w-3" />
+          ) : column.getIsSorted() === 'asc' ? (
+            <ArrowUp className="ml-2 h-3 w-3" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          )}
         </Button>
       ),
       cell: ({ row }) => {

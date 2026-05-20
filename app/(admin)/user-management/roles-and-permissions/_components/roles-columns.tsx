@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Shield } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Shield } from 'lucide-react';
 import { Button } from '@/app/_components/ui/button';
 import { RolePermissionsList } from '@/app/(admin)/user-management/_components/role-permissions-list';
 import { RoleActionsCell } from '@/app/(admin)/user-management/roles-and-permissions/_components/role-actions-cell';
@@ -24,7 +24,13 @@ export function getRolesColumns(canUpdate: boolean, canDelete: boolean): ColumnD
           className="-ml-4 hover:bg-transparent"
         >
           Role Name
-          <ArrowUpDown className="ml-2 h-3 w-3" />
+          {column.getIsSorted() === 'desc' ? (
+            <ArrowDown className="ml-2 h-3 w-3" />
+          ) : column.getIsSorted() === 'asc' ? (
+            <ArrowUp className="ml-2 h-3 w-3" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          )}
         </Button>
       ),
       cell: ({ row }) => {
