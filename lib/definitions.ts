@@ -5,11 +5,23 @@ export const SignupFormSchema = z.object({
     .string()
     .min(2, { message: "First name must be at least 2 characters long." })
     .trim(),
+  middleName: z
+    .string()
+    .trim()
+    .optional(),
   lastName: z
     .string()
     .min(2, { message: "Last name must be at least 2 characters long." })
     .trim(),
+  suffixName: z
+    .string()
+    .trim()
+    .optional(),
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
+  phoneNumber: z
+    .string()
+    .min(11, { message: "Phone number must be at least 11 characters." })
+    .trim(),
   password: z
     .string()
     .min(8, { message: "Be at least 8 characters long" })
@@ -30,8 +42,11 @@ export type FormState =
   | {
       errors?: {
         firstName?: string[];
+        middleName?: string[];
         lastName?: string[];
+        suffixName?: string[];
         email?: string[];
+        phoneNumber?: string[];
         password?: string[];
       };
       message?: string;

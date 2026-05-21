@@ -52,9 +52,6 @@ export async function seedAuth(prisma: PrismaClient) {
 
   const allPermission = await getPermission("*", "*");
   const dashboardPermission = await getPermission("read", "dashboard");
-  const manageUsersPermission = await getPermission("manage", "user-management.users");
-  const manageRolesPermission = await getPermission("manage", "user-management.roles-and-permissions");
-  const updateSystemSettingsPermission = await getPermission("update", "system-settings");
   const readSystemSettingsPermission = await getPermission("read", "system-settings");
 
   // Helper to map role to permissions
@@ -101,7 +98,10 @@ export async function seedAuth(prisma: PrismaClient) {
     create: {
       email,
       firstName: "Super",
+      middleName: "Dev",
       lastName: "Admin",
+      suffixName: null,
+      phoneNumber: "09900001111",
       passwordHash: hashedPassword,
       isActive: true,
     },
@@ -115,6 +115,7 @@ export async function seedAuth(prisma: PrismaClient) {
       email: adminEmail,
       firstName: "System",
       lastName: "Admin",
+      phoneNumber: "09900001112",
       passwordHash: hashedPassword,
       isActive: true,
     },
@@ -128,6 +129,8 @@ export async function seedAuth(prisma: PrismaClient) {
       email: userEmail,
       firstName: "Standard",
       lastName: "User",
+      suffixName: "Jr.",
+      phoneNumber: "09900001113",
       passwordHash: hashedPassword,
       isActive: true,
     },
@@ -152,13 +155,6 @@ export async function seedAuth(prisma: PrismaClient) {
     },
   });
 
-  // Wait, the schema uses @@unique([userId, roleId, scopeType, scopeId])
-  // If they are null, they are considered individual.
-  // Let's check existing logic in seed.ts for userRole.
-  
-  // Re-checking seed.ts lines 147-184:
-  // It uses findFirst and then create. I'll stick to that if upsert is tricky with nulls.
-  
   const roleAssignments = [
     { userId: superAdminUser.id, roleId: superAdminRole.id },
     { userId: adminUser.id, roleId: adminRole.id },

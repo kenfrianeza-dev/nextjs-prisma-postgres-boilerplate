@@ -10,7 +10,10 @@ export type UserWithRoles = {
   id: string;
   email: string;
   firstName: string;
+  middleName: string | null;
   lastName: string;
+  suffixName: string | null;
+  phoneNumber: string;
   isActive: boolean;
   roles: {
     role: {

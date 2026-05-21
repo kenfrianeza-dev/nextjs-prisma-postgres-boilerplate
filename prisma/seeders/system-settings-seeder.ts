@@ -16,7 +16,7 @@ export async function seedSystemSettings(prisma: PrismaClient) {
         { key: "address", value: "123 Business Ave, Tech City", type: "string", description: "Physical address" },
         { key: "contact_email", value: "contact@abc.corp", type: "string", description: "Primary contact email" },
         { key: "contact_phone", value: "+1-555-0123", type: "string", description: "Primary contact phone" },
-        { key: "logo", value: "/images/logo.png", type: "string", description: "Organization logo path" },
+        { key: "logo", value: "/public/logo.png", type: "string", description: "Organization logo path" },
         { key: "timezone", value: "UTC", type: "string", description: "System timezone" },
         { key: "date_format", value: "YYYY-MM-DD", type: "string", description: "Preferred date format" },
         { key: "time_format", value: "HH:mm", type: "string", description: "Preferred time format" },
@@ -69,7 +69,7 @@ export async function seedSystemSettings(prisma: PrismaClient) {
         { key: "app_name", value: "NextJS Boilerplate", type: "string", description: "Application name used in headers" },
         { key: "app_name_short", value: "SYS", type: "string", description: "Application short-name used in headers" },
         { key: "favicon", value: "/favicon.ico", type: "string", description: "Path to favicon" },
-        { key: "email_logo", value: "/images/email-logo.png", type: "string", description: "Logo for email templates" },
+        { key: "email_logo", value: "/public/email-logo.png", type: "string", description: "Logo for email templates" },
         { key: "footer_text", value: "© 2026 ABc Corp", type: "string", description: "Footer copyright text" },
         { key: "powered_by_text", value: "Powered by NextJS", type: "string", description: "Branding text" },
       ]
@@ -99,7 +99,7 @@ export async function seedSystemSettings(prisma: PrismaClient) {
     {
       name: "Financial & Billing",
       slug: "financial-billing",
-      description: "Taxation and invoicing configuration",
+      description: "Taxation and invoicing configuration", 
       icon: "Receipt",
       order: 7,
       settings: [

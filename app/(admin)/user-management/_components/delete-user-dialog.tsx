@@ -43,7 +43,7 @@ export function DeleteUserDialog({
               <AvatarFallback>{currentUser.firstName[0]}{currentUser.lastName[0]}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="font-semibold text-foreground">{currentUser.firstName} {currentUser.lastName}</span>
+              <span className="font-semibold text-foreground">{[currentUser.firstName, currentUser.middleName, currentUser.lastName, currentUser.suffixName].filter(Boolean).join(' ')}</span>
               <span className="text-sm text-muted-foreground">{currentUser.email}</span>
             </div>
           </div>

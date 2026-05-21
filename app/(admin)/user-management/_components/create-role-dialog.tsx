@@ -39,7 +39,7 @@ export function CreateRoleDialog({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button className="w-full sm:w-auto">
-          <Plus className="mr-2 h-4 w-4" /> Create Role
+          <Plus className="h-4 w-4" /> Create Role
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] gap-0 p-0">

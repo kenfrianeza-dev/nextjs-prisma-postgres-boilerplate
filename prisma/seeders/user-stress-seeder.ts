@@ -40,6 +40,7 @@ export async function seedUserStress(prisma: PrismaClient) {
       email: `user${i}.stress.test@dummy.com`,
       firstName: `${firstNames[fIndex]} [${i}]`,
       lastName: `${lastNames[lIndex]} [${i}]`,
+      phoneNumber: `+1-555-${String(i).padStart(4, '0')}`,
       passwordHash: hashedPassword,
       isActive: i % 5 !== 0, // Interleave active/inactive
     });

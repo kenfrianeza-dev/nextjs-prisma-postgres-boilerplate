@@ -371,6 +371,19 @@ lsof -ti:3000 | xargs kill -9
 docker exec -it app pnpm prisma generate
 ```
 
+### Prisma Client Out of Sync (Unknown Argument Error)
+If you recently added fields to your Prisma schema and regenerated the client, but you still encounter errors like `Unknown argument [fieldName]. Available options are marked with ?`, the Next.js development server might be holding onto a cached version of the Prisma Client in memory.
+
+To fix this when running via Docker, restart the application container to flush the cache and load the newly generated client:
+```bash
+# Generate the updated client (if not already done)
+docker exec -it app pnpm prisma generate
+
+# Restart the application container
+docker restart app
+```
+
+
 ### Database Tables Missing (PrismaClientKnownRequestError)
 If you see an error like `The table public.User does not exist in the current database.`, the database migrations haven't run.
 To fix this while using Docker, run:

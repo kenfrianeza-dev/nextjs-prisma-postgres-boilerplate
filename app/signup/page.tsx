@@ -26,12 +26,27 @@ export default function SignupPage() {
                   type="text"
                   required
                   className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
-                  placeholder="First Name"
+                  placeholder="First Name *"
                 />
                 {state?.errors?.firstName && (
                   <p className="text-red-500 text-sm mt-1">{state.errors.firstName}</p>
                 )}
               </div>
+              <div>
+                <label htmlFor="middleName" className="sr-only">Middle Name</label>
+                <input
+                  id="middleName"
+                  name="middleName"
+                  type="text"
+                  className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
+                  placeholder="Middle Name"
+                />
+                {state?.errors?.middleName && (
+                  <p className="text-red-500 text-sm mt-1">{state.errors.middleName}</p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="lastName" className="sr-only">Last Name</label>
                 <input
@@ -40,10 +55,23 @@ export default function SignupPage() {
                   type="text"
                   required
                   className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
-                  placeholder="Last Name"
+                  placeholder="Last Name *"
                 />
                 {state?.errors?.lastName && (
                   <p className="text-red-500 text-sm mt-1">{state.errors.lastName}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="suffixName" className="sr-only">Suffix</label>
+                <input
+                  id="suffixName"
+                  name="suffixName"
+                  type="text"
+                  className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
+                  placeholder="Suffix (e.g. Jr., Sr.)"
+                />
+                {state?.errors?.suffixName && (
+                  <p className="text-red-500 text-sm mt-1">{state.errors.suffixName}</p>
                 )}
               </div>
             </div>
@@ -59,10 +87,26 @@ export default function SignupPage() {
                 autoComplete="email"
                 required
                 className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
-                placeholder="Email address"
+                placeholder="Email address *"
               />
               {state?.errors?.email && (
                 <p className="text-red-500 text-sm mt-1">{state.errors.email}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="phoneNumber" className="sr-only">
+                Phone Number
+              </label>
+              <input
+                id="phoneNumber"
+                name="phoneNumber"
+                type="tel"
+                required
+                className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
+                placeholder="Phone Number *"
+              />
+              {state?.errors?.phoneNumber && (
+                <p className="text-red-500 text-sm mt-1">{state.errors.phoneNumber}</p>
               )}
             </div>
             <div>
@@ -76,7 +120,7 @@ export default function SignupPage() {
                 autoComplete="new-password"
                 required
                 className="relative block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
-                placeholder="Password"
+                placeholder="Password *"
               />
               <p className="text-xs text-gray-500 mt-1">Must contain 8+ chars, 1 letter, 1 number, 1 special char.</p>
               {state?.errors?.password && (

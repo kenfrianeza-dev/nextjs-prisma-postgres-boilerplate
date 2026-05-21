@@ -18,7 +18,10 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
   return [
     {
       id: 'name',
-      accessorFn: (row) => `${row.firstName} ${row.lastName}`,
+      accessorFn: (row) => {
+        const parts = [row.firstName, row.middleName, row.lastName, row.suffixName].filter(Boolean);
+        return parts.join(' ');
+      },
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -38,6 +41,7 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
       cell: ({ row }) => {
         const user = row.original;
         const initials = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+        const fullName = [user.firstName, user.middleName, user.lastName, user.suffixName].filter(Boolean).join(' ');
         return (
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9">
@@ -45,7 +49,7 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
             </Avatar>
             <div className="flex flex-col">
               <span className="font-medium text-foreground">
-                {user.firstName} {user.lastName}
+                {fullName}
               </span>
               <span className="text-xs text-muted-foreground truncate max-w-[200px]">
                 {user.email}
@@ -54,6 +58,28 @@ export function getUserColumns(canUpdate: boolean, canDelete: boolean): ColumnDe
           </div>
         );
       },
+    },
+    {
+      accessorKey: 'phoneNumber',
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="-ml-4 hover:bg-transparent"
+        >
+          Phone
+          {column.getIsSorted() === 'desc' ? (
+            <ArrowDown className="ml-2 h-3 w-3" />
+          ) : column.getIsSorted() === 'asc' ? (
+            <ArrowUp className="ml-2 h-3 w-3" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          )}
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <span className="text-sm text-muted-foreground">{row.getValue('phoneNumber')}</span>
+      ),
     },
     {
       accessorKey: 'roles',

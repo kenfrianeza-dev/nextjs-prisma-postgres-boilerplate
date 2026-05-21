@@ -40,7 +40,10 @@ export const UserManagementService = {
   async createUser(userPermissions: string[], data: {
     email: string;
     firstName: string;
+    middleName?: string;
     lastName: string;
+    suffixName?: string;
+    phoneNumber: string;
     password?: string;
     roleIds?: string[];
     permissionIds?: string[];
@@ -63,7 +66,10 @@ export const UserManagementService = {
   async updateUser(userPermissions: string[], id: string, data: {
     email?: string;
     firstName?: string;
+    middleName?: string;
     lastName?: string;
+    suffixName?: string;
+    phoneNumber?: string;
     isActive?: boolean;
     roleIds?: string[];
     permissionIds?: string[];

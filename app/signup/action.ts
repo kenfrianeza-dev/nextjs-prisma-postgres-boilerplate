@@ -10,8 +10,11 @@ import { redirect } from "next/navigation";
 export async function signup(state: FormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
     firstName: formData.get("firstName"),
+    middleName: formData.get("middleName") || undefined,
     lastName: formData.get("lastName"),
+    suffixName: formData.get("suffixName") || undefined,
     email: formData.get("email"),
+    phoneNumber: formData.get("phoneNumber"),
     password: formData.get("password"),
   });
 
@@ -21,7 +24,7 @@ export async function signup(state: FormState, formData: FormData) {
     };
   }
 
-  const { firstName, lastName, email, password } = validatedFields.data;
+  const { firstName, middleName, lastName, suffixName, email, phoneNumber, password } = validatedFields.data;
 
   // Check if user exists
   const existingUser = await prisma.user.findUnique({
@@ -40,8 +43,11 @@ export async function signup(state: FormState, formData: FormData) {
     const user = await prisma.user.create({
       data: {
         firstName,
+        middleName: middleName ?? null,
         lastName,
+        suffixName: suffixName ?? null,
         email,
+        phoneNumber,
         passwordHash: hashedPassword,
       },
     });

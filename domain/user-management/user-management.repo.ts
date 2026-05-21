@@ -177,7 +177,10 @@ export const UserManagementRepo = {
   async createUser(data: {
     email: string;
     firstName: string;
+    middleName?: string;
     lastName: string;
+    suffixName?: string;
+    phoneNumber: string;
     passwordHash: string;
     roleIds?: string[];
     permissionIds?: string[];
@@ -209,7 +212,10 @@ export const UserManagementRepo = {
     data: {
       email?: string;
       firstName?: string;
+      middleName?: string;
       lastName?: string;
+      suffixName?: string;
+      phoneNumber?: string;
       isActive?: boolean;
       roleIds?: string[];
       permissionIds?: string[];
