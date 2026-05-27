@@ -204,33 +204,96 @@ pnpm lint             # Run ESLint
 
 ```
 nextjs-prisma-postgres-boilerplate/
-├── app/
-│   ├── components/           # React components
-│   │   ├── login-form.tsx   # Login component
-│   │   └── ui/              # shadcn/ui components
-│   ├── dashboard/           # Dashboard pages
-│   ├── page.tsx             # Home page
-│   └── layout.tsx           # Root layout
-├── lib/
-│   ├── prisma.ts            # Prisma client instance
-│   └── utils.ts             # Utility functions
-├── prisma/
-│   ├── schema.prisma        # Database schema
-│   ├── seed.ts              # Seeder coordinator
-│   └── seeders/             # Modular seeder files
-│       ├── index.ts         # Seeder exports
-│       ├── auth.ts          # Roles and Users
-│       ├── permissions.ts   # System permissions
-│       └── system-settings.ts # Core system settings
-├── public/                  # Static assets
-├── .env.local              # Environment variables (create this)
-├── docker compose.yml      # Docker services configuration
-├── Dockerfile              # Next.js app containerization
-├── next.config.ts          # Next.js configuration
-├── tailwind.config.ts      # Tailwind CSS configuration
-├── tsconfig.json           # TypeScript configuration
-├── package.json            # Project dependencies
-└── README.md               # This file
+├── app/                              # Next.js App Router root
+│   ├── (admin)/                      # Protected admin route group
+│   │   ├── layout.tsx                # Admin shell layout (sidebar, header)
+│   │   ├── dashboard/                # /dashboard route
+│   │   │   ├── page.tsx
+│   │   │   ├── dashboard-client.tsx
+│   │   │   ├── action.ts
+│   │   │   ├── _components/          # Dashboard-specific components
+│   │   │   ├── _store/               # Dashboard state (Zustand)
+│   │   │   └── _types/               # Dashboard TypeScript types
+│   │   ├── system-settings/          # /system-settings route
+│   │   │   ├── page.tsx
+│   │   │   ├── settings-client.tsx
+│   │   │   ├── action.ts
+│   │   │   ├── _components/
+│   │   │   ├── _hooks/
+│   │   │   ├── _store/
+│   │   │   └── _types/
+│   │   ├── user-management/          # /user-management route
+│   │   │   ├── users/
+│   │   │   ├── roles-and-permissions/
+│   │   │   └── _components/
+│   │   └── test-route/               # Sandbox / dev test route
+│   ├── (public)/                     # Public (unauthenticated) route group
+│   │   ├── layout.tsx
+│   │   ├── page.tsx                  # Login / home page
+│   │   └── action.ts                 # Login server action
+│   ├── _components/                  # Shared app-wide components
+│   │   ├── login-form.tsx
+│   │   ├── theme-provider.tsx
+│   │   ├── index.ts
+│   │   ├── container/
+│   │   ├── header/
+│   │   ├── navigation/               # Sidebar navigation components
+│   │   │   ├── nav-main.tsx
+│   │   │   ├── nav-sidebar.tsx
+│   │   │   ├── nav-team-switcher.tsx
+│   │   │   └── nav-user.tsx
+│   │   ├── secondary-sidebar/
+│   │   └── ui/                       # shadcn/ui primitives
+│   ├── auth-actions/                 # Auth server actions
+│   ├── config/                       # App-level config (nav items, etc.)
+│   ├── hooks/                        # Shared React hooks
+│   ├── utils/                        # Client-side utilities
+│   ├── signup/                       # /signup route
+│   ├── unauthorized/                 # /unauthorized route
+│   ├── not-found.tsx                 # 404 page
+│   ├── layout.tsx                    # Root layout
+│   └── globals.css                   # Global styles
+├── domain/                           # Domain / business logic layer
+│   ├── shared/
+│   │   └── permission.engine.ts      # Core RBAC permission engine
+│   ├── system/
+│   │   ├── system-settings.policy.ts
+│   │   ├── system-settings.repo.ts
+│   │   └── system-settings.service.ts
+│   └── user-management/
+│       ├── user-management.policy.ts
+│       ├── user-management.repo.ts
+│       └── user-management.service.ts
+├── lib/                              # Server-side utilities & auth
+│   ├── prisma.ts                     # Prisma client singleton
+│   ├── auth.ts                       # Authentication logic
+│   ├── auth-context.ts               # Auth session context
+│   ├── definitions.ts                # Shared type definitions
+│   ├── errors.ts                     # Custom error classes
+│   ├── password.ts                   # Password hashing utilities
+│   └── permissions.ts                # Permission constants
+├── prisma/                           # Prisma ORM
+│   ├── schema.prisma                 # Database schema
+│   ├── seed.ts                       # Seeder coordinator
+│   ├── migrations/                   # Auto-generated migrations
+│   └── seeders/                      # Modular seeder files
+│       ├── index.ts                  # Seeder exports
+│       ├── auth-seeder.ts            # Roles and Users
+│       ├── permissions-seeder.ts     # System permissions
+│       ├── system-settings-seeder.ts # Core system settings
+│       └── user-stress-seeder.ts     # Bulk user stress-test data
+├── public/                           # Static assets
+├── .env                              # Environment variables
+├── .env.example                      # Example environment variables
+├── docker-compose.yml                # Docker services configuration
+├── Dockerfile                        # Next.js app containerization
+├── prisma.config.ts                  # Prisma config (multi-schema / Studio)
+├── proxy.ts                          # Dev reverse proxy
+├── next.config.ts                    # Next.js configuration
+├── vitest.config.ts                  # Vitest test configuration
+├── tsconfig.json                     # TypeScript configuration
+├── package.json                      # Project dependencies
+└── README.md                         # This file
 ```
 
 ## Database Schema Overview
