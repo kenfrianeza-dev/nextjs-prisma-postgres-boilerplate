@@ -1,45 +1,74 @@
-import { MODULES } from "@/app/config/modules-constants";
-
+import { SIDEBAR_CONFIG, NavItem } from "@/app/config/navigation-config";
 import { PermissionEngine } from "@/domain/shared/permission.engine";
+import { LucideIcon } from "lucide-react";
 
-export function mapModulesToNavItems(
-  modules: typeof MODULES,
+// ---------------------------------------------------------------------------
+// Return types
+// ---------------------------------------------------------------------------
+
+export interface NavUIChild {
+  title: string;
+  url: string;
+}
+
+export interface NavUIItem {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+  items: NavUIChild[];
+}
+
+// ---------------------------------------------------------------------------
+// Mapper
+// ---------------------------------------------------------------------------
+
+export function mapSidebarToNavItems(
+  config: Record<string, NavItem>,
   permissions?: string[]
-) {
-  return Object.values(modules)
-    .map((module: any) => {
-      // Filter children first
-      const authorizedChildren = module.children.filter((child: any) =>
-        permissions ? PermissionEngine.has(permissions, child.permission) : true
+): NavUIItem[] {
+  return Object.values(config)
+    .map((navItem: NavItem): NavUIItem | null => {
+      // Filter children the user is permitted to see
+      const authorizedChildren = navItem.children.filter(
+        (child) =>
+          permissions
+            ? PermissionEngine.has(permissions, child.permission)
+            : true
       );
 
-      // Check if module itself has a permission requirement (if any)
-      // For now, if it has children, we show it if at least one child is accessible.
-      // If it has no children (like Dashboard), we check its own permission if present.
-
-      const isModuleAccessible = permissions
-        ? PermissionEngine.has(permissions, module.permission)
+      // A nav item with no children is shown if the user has its own permission.
+      // A nav item with children is shown only when at least one child is accessible.
+      const isItemAccessible = permissions
+        ? PermissionEngine.has(permissions, navItem.permission)
         : true;
 
-      // Special case: If module has children, it's visible if it has at least one authorized child.
-      // If it has NO children config (like dashboard), it relies on isModuleAccessible.
       const hasVisibleChildren =
-        module.children.length > 0 && authorizedChildren.length > 0;
-      const shouldShowModule =
-        module.children.length === 0 ? isModuleAccessible : hasVisibleChildren;
+        navItem.children.length > 0 && authorizedChildren.length > 0;
 
-      if (!shouldShowModule) return null;
+      const shouldShow =
+        navItem.children.length === 0 ? isItemAccessible : hasVisibleChildren;
 
+      if (!shouldShow) return null;
 
       return {
-        title: module.name,
-        url: `/${module.blob}`,
-        icon: module.icon,
-        items: authorizedChildren.map((child: any) => ({
-          title: child.name,
-          url: `/${module.blob}/${child.blob}`,
-        })),
+        title: navItem.name,
+        url: `/${navItem.slug}`,
+        icon: navItem.icon,
+        items: authorizedChildren.map(
+          (child): NavUIChild => ({
+            title: child.name,
+            url: `/${navItem.slug}/${child.slug}`,
+          })
+        ),
       };
     })
-    .filter(Boolean) as any[]; // cast to any[] to match expected return type easily or let inference work
+    .filter((item): item is NavUIItem => item !== null);
+}
+
+// ---------------------------------------------------------------------------
+// Convenience overload — pass nothing to get the full (no-permission-filter) list
+// ---------------------------------------------------------------------------
+
+export function buildDefaultNavItems(): NavUIItem[] {
+  return mapSidebarToNavItems(SIDEBAR_CONFIG);
 }

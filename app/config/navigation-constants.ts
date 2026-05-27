@@ -1,6 +1,5 @@
 import { AudioWaveform, Command, GalleryVerticalEnd } from "lucide-react";
-import { mapModulesToNavItems } from "@/app/config/navigation-utils";
-import { MODULES } from "@/app/config/modules-constants";
+import { buildDefaultNavItems } from "@/app/config/navigation-utils";
 
 export const NAVIGATIONS = {
   user: {
@@ -25,5 +24,5 @@ export const NAVIGATIONS = {
       plan: "Option 3",
     },
   ],
-  navMain: mapModulesToNavItems(MODULES),
+  navMain: buildDefaultNavItems(),
 };

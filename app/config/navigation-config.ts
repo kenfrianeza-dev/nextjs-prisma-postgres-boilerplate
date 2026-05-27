@@ -5,39 +5,37 @@ import {
   LucideIcon,
 } from "lucide-react";
 
-export interface ModuleChild {
-  id: string;
-  label: string;
+export interface NavChild {
+  name: string;
   slug: string;
   permission?: string | string[];
 }
 
-export interface Module {
-  id: string;
-  label: string;
+export interface NavItem {
+  name: string;
   slug: string;
   icon: LucideIcon;
   permission?: string | string[];
-  children: ModuleChild[];
+  children: NavChild[];
 }
 
-export const MODULES = {
+export const SIDEBAR_CONFIG: Record<string, NavItem> = {
   dashboard: {
     name: "Dashboard",
-    blob: "dashboard",
+    slug: "dashboard",
     permission: "read:dashboard",
     icon: LayoutDashboard,
     children: [],
   },
   user_management: {
     name: "User Management",
-    blob: "user-management",
+    slug: "user-management",
     permission: ["manage:user-management", "read:user-management"],
     icon: Users2,
     children: [
       {
         name: "Users",
-        blob: "users",
+        slug: "users",
         permission: [
           "manage:user-management.users",
           "read:user-management.users",
@@ -45,7 +43,7 @@ export const MODULES = {
       },
       {
         name: "Roles & Permissions",
-        blob: "roles-and-permissions",
+        slug: "roles-and-permissions",
         permission: [
           "manage:user-management.roles-and-permissions",
           "read:user-management.roles-and-permissions",
@@ -55,7 +53,7 @@ export const MODULES = {
   },
   system_settings: {
     name: "System Settings",
-    blob: "system-settings",
+    slug: "system-settings",
     permission: ["manage:system-settings", "read:system-settings"],
     icon: SettingsIcon,
     children: [],

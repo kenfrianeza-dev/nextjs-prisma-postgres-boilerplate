@@ -16,8 +16,8 @@ import { NAVIGATIONS } from "@/app/config/navigation-constants"
 
 const navigations = NAVIGATIONS;
 
-import { MODULES } from "@/app/config/modules-constants"
-import { mapModulesToNavItems } from "@/app/config/navigation-utils"
+import { SIDEBAR_CONFIG } from "@/app/config/navigation-config"
+import { mapSidebarToNavItems } from "@/app/config/navigation-utils"
 
 function AppSidebar({
   user,
@@ -31,8 +31,8 @@ function AppSidebar({
   }
   permissions?: string[]
 }) {
-  const items = React.useMemo(() =>
-    mapModulesToNavItems(MODULES, permissions),
+  const items = React.useMemo(
+    () => mapSidebarToNavItems(SIDEBAR_CONFIG, permissions),
     [permissions]
   );
 
