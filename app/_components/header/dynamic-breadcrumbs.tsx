@@ -11,7 +11,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/app/_components/ui/breadcrumb"
-import { SIDEBAR_CONFIG, NavItem } from "@/app/config/navigation-config"
+import { SIDEBAR_CONFIG } from "@/app/config/navigation/navigation-config"
+import { getAllNavItems } from "@/app/config/navigation/navigation-utils"
 import { formatLabel } from "@/app/utils"
 
 export function DynamicBreadcrumbs() {
@@ -20,22 +21,22 @@ export function DynamicBreadcrumbs() {
   // Split pathname into segments and filter out empty strings
   const segments = pathname.split("/").filter((segment) => segment !== "")
 
+  // Flatten all NavItems across all categories once for slug lookups
+  const allNavItems = getAllNavItems(SIDEBAR_CONFIG);
+
   // Helper to check if a route segment should be clickable
   const isRouteClickable = (segment: string) => {
-    // Find matching module or child
-    const navItem = Object.values(SIDEBAR_CONFIG).find(
-      (item: NavItem) => item.slug === segment
-    )
+    const navItem = allNavItems.find((item) => item.slug === segment);
 
     if (navItem) {
       // If it has children but no permission of its own, it's a grouping/container segment
       if (navItem.children.length > 0 && !navItem.permission) {
-        return false
+        return false;
       }
     }
-    
-    return true
-  }
+
+    return true;
+  };
 
   return (
     <Breadcrumb>

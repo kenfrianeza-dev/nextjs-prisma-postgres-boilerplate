@@ -1,23 +1,17 @@
 "use client"
 
 import * as React from "react"
-import { User } from "lucide-react"
 import { NavMain, NavUser, TeamSwitcher } from "@/app/_components/navigation"
-
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarRail,
 } from "@/app/_components/ui/sidebar"
-import { NAVIGATIONS } from "@/app/config/navigation-constants"
-
-const navigations = NAVIGATIONS;
-
-import { SIDEBAR_CONFIG } from "@/app/config/navigation-config"
-import { mapSidebarToNavItems } from "@/app/config/navigation-utils"
+import { NAVIGATIONS } from "@/app/config/navigation/navigation-constants"
+import { SIDEBAR_CONFIG } from "@/app/config/navigation/navigation-config"
+import { getAuthorizedSidebar } from "@/app/config/navigation/navigation-utils"
 
 function AppSidebar({
   user,
@@ -31,23 +25,18 @@ function AppSidebar({
   }
   permissions?: string[]
 }) {
-  const items = React.useMemo(
-    () => mapSidebarToNavItems(SIDEBAR_CONFIG, permissions),
+  const categories = React.useMemo(
+    () => getAuthorizedSidebar(SIDEBAR_CONFIG, permissions),
     [permissions]
   );
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex items-center justify-center p-2">
-        <TeamSwitcher teams={navigations.teams} />
-        {/* <SidebarGroupLabel>Platform</SidebarGroupLabel> */}
+        <TeamSwitcher teams={NAVIGATIONS.teams} />
       </SidebarHeader>
-      {/* <SidebarHeader className="flex items-center justify-center px-4 pt-4"> */}
-        {/* <SidebarGroupLabel className="text-lg font-bold">HRIS</SidebarGroupLabel> */}
-        {/* <p className="text-xs -mt-2 mb-2 text-muted-foreground text-center">Human Resource Information System</p> */}
-      {/* </SidebarHeader> */}
       <SidebarContent>
-        <NavMain items={items} />
+        <NavMain categories={categories} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />
