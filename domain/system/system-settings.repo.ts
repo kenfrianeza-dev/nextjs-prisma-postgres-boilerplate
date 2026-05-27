@@ -31,6 +31,18 @@ export const SystemSettingsRepo = {
   },
 
   /**
+   * Fetch multiple settings by their keys and return a key→value map.
+   * Useful for lightweight lookups (e.g. branding data for the sidebar).
+   */
+  async getSettingsByKeys(keys: string[]): Promise<Record<string, string | null>> {
+    const settings = await prisma.systemSetting.findMany({
+      where: { key: { in: keys } },
+      select: { key: true, value: true },
+    });
+    return Object.fromEntries(settings.map((s) => [s.key, s.value]));
+  },
+
+  /**
    * Update a setting's value.
    */
   async updateSetting(key: string, value: string) {
@@ -54,3 +66,4 @@ export const SystemSettingsRepo = {
     );
   },
 };
+

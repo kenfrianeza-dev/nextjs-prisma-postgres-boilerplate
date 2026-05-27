@@ -1,90 +1,50 @@
 "use client"
 
 import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
+import { SidebarMenu, SidebarMenuItem, SidebarMenuButton, useSidebar } from "@/app/_components/ui/sidebar"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/app/_components/ui/sidebar"
+interface SidebarBrandProps {
+  /** Full organization / app name (e.g. "ABC Corporation") */
+  appName?: string
+  /** Short abbreviation shown in the collapsed icon (e.g. "ABC") */
+  appNameShort?: string
+}
 
-export default function TeamSwitcher({
-  teams,
-}: {
-  teams: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
-}) {
-  const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = React.useState(teams[0])
+/**
+ * SidebarBrand replaces the old TeamSwitcher.
+ * Displays the organization logo (initials) and app name in the sidebar header.
+ * Shows only the initials badge when the sidebar is collapsed.
+ */
+export default function SidebarBrand({
+  appName = "My App",
+  appNameShort,
+}: SidebarBrandProps) {
+  const { open } = useSidebar()
 
-  if (!activeTeam) {
-    return null
-  }
+  // Derive initials: use appNameShort if provided, otherwise first 3 chars of appName
+  const initials = appNameShort
+    ? appNameShort.slice(0, 3).toUpperCase()
+    : appName.slice(0, 3).toUpperCase()
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
-            >
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <activeTeam.logo className="size-4" />
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{activeTeam.name}</span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            align="start"
-            side={isMobile ? "bottom" : "right"}
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Teams
-            </DropdownMenuLabel>
-            {teams.map((team, index) => (
-              <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
-                className="gap-2 p-2"
-              >
-                <div className="flex size-6 items-center justify-center rounded-md border">
-                  <team.logo className="size-3.5 shrink-0" />
-                </div>
-                {team.name}
-                <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
-              <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                <Plus className="size-4" />
-              </div>
-              <div className="text-muted-foreground font-medium">Add team</div>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <SidebarMenuButton
+          size="lg"
+          className="cursor-default hover:bg-transparent active:bg-transparent"
+          // Not interactive — disable the hover/active states
+          asChild={false}
+        >
+          {/* Logo / initials badge */}
+          <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold tracking-wide">
+            {initials}
+          </div>
+
+          {/* App name — hidden when sidebar is collapsed */}
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">{appName}</span>
+          </div>
+        </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>
   )

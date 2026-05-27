@@ -9,22 +9,27 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/app/_components/ui/sidebar"
-import { NAVIGATIONS } from "@/app/config/navigation/navigation-constants"
 import { SIDEBAR_CONFIG } from "@/app/config/navigation/navigation-config"
 import { getAuthorizedSidebar } from "@/app/config/navigation/navigation-utils"
 
-function AppSidebar({
-  user,
-  permissions,
-  ...props
-}: React.ComponentProps<typeof Sidebar> & {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user?: {
     name?: string
     email?: string
     avatar?: string
   }
   permissions?: string[]
-}) {
+  appName?: string
+  appNameShort?: string
+}
+
+function AppSidebar({
+  user,
+  permissions,
+  appName,
+  appNameShort,
+  ...props
+}: AppSidebarProps) {
   const categories = React.useMemo(
     () => getAuthorizedSidebar(SIDEBAR_CONFIG, permissions),
     [permissions]
@@ -33,7 +38,7 @@ function AppSidebar({
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex items-center justify-center p-2">
-        <TeamSwitcher teams={NAVIGATIONS.teams} />
+        <TeamSwitcher appName={appName} appNameShort={appNameShort} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain categories={categories} />
@@ -47,3 +52,4 @@ function AppSidebar({
 }
 
 export default AppSidebar;
+
