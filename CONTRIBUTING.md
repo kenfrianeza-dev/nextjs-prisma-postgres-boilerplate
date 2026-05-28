@@ -49,3 +49,106 @@ Since we are keeping things lightweight without a separate task tracker, your PR
 * **How to test it:** (e.g., "Click the login button and ensure it redirects to the dashboard.")
 
 *(Note: If we adopt a task tracker in the future, please include the ticket number in your branch name. Example: `feat/ISSUE-42-admin-auth-guard`)*
+
+---
+
+## ✍️ Commit Message Guidelines
+
+All commits must follow the **[Conventional Commits](https://www.conventionalcommits.org/)** specification. This keeps the git history readable, makes it easy to scan what changed at a glance, and enables future automation (changelogs, releases, etc.).
+
+---
+
+### 5. Commit Message Format
+
+Every commit message must follow this structure:
+
+```
+<type>[(optional scope)]: <short description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+* The **type** and **description** are **required**.
+* The **scope**, **body**, and **footer** are optional but encouraged for non-trivial changes.
+
+---
+
+### 6. Commit Types
+
+Use one of the following types to categorize each commit:
+
+| Type | When to Use | Example |
+|---|---|---|
+| `feat` | Introducing a new feature or user-facing capability | `feat: add cookie chunking for large session payloads` |
+| `fix` | Fixing a bug or broken behavior | `fix: resolve hydration inconsistency in settings page` |
+| `refactor` | Restructuring code without changing behavior | `refactor: modularize navigation config into directory structure` |
+| `docs` | Changes to documentation only (README, comments, etc.) | `docs: update project structure overview in README` |
+| `chore` | Maintenance tasks — deps, config, tooling, scripts | `chore: remove db seed command from docker-compose startup` |
+| `style` | Visual/UI-only changes with no logic impact | `style: refine badge component styling and icon variants` |
+| `test` | Adding or updating tests | `test: add Vitest coverage for user management module` |
+| `perf` | Performance improvements | `perf: lazy-load role permissions on dashboard mount` |
+| `ci` | CI/CD pipeline or workflow changes | `ci: add lint step to GitHub Actions workflow` |
+| `revert` | Reverting a previous commit | `revert: feat: add experimental drag-and-drop table` |
+
+---
+
+### 7. Using Scopes (Optional but Recommended)
+
+A **scope** narrows down *which part of the codebase* the commit affects. It is written in parentheses after the type:
+
+```
+feat(auth): implement direct user permissions alongside role-based assignments
+refactor(user-management): refactor module with Vitest setup and Zustand state
+chore(docker): automate database migrations and seeding in docker-compose
+```
+
+Use the module, feature, or layer name as the scope (e.g., `auth`, `user-management`, `settings`, `roles`, `dashboard`, `docker`, `api`).
+
+---
+
+### 8. Writing a Good Description
+
+The short description (the part after the colon) is the most important part of your commit message.
+
+* **Use the imperative mood** — write it as a command, as if completing the sentence *"This commit will…"*
+  * ✅ `feat: add switch component for boolean settings`
+  * ❌ `feat: added switch component` or `feat: adding switch component`
+* **Start with a lowercase letter.**
+* **Do not end with a period.**
+* **Keep it under 72 characters** so it displays cleanly in git logs and GitHub.
+
+---
+
+### 9. Examples from This Repository
+
+The following are real examples from this project's commit history that follow these conventions correctly:
+
+```
+feat: add middle name, suffix, and phone number fields to user profile
+refactor: modularize roles-and-permissions client into feature-based components
+docs: add CONTRIBUTING.md with branching and pull request guidelines
+chore: remove db seed command from docker-compose startup sequence
+style: refine UI components with new badge variants and optimized icons
+feat(auth): implement direct user permissions and refine permission engine
+feat(user-management): sync direct vs inherited permissions and ensure cache consistency
+refactor: migrate shared components to a centralized directory and reorganize admin module structure
+```
+
+---
+
+### 10. Commit Message Checklist
+
+Before committing, verify:
+
+- [ ] The type correctly reflects the intent of the change.
+- [ ] The description uses the imperative mood and is under 72 characters.
+- [ ] A scope is included if the change is isolated to a specific module.
+- [ ] No period at the end of the description.
+- [ ] Breaking changes are noted with a `BREAKING CHANGE:` footer or a `!` after the type (e.g., `refactor!: rename API response shape`).
+
+---
+
+> [!NOTE]
+> Heads up — older commits in this repo don't always follow this format. These guidelines were written after the project was already underway, so the history is a bit inconsistent. That's fine. From here on out, this is the standard.
