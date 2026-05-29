@@ -14,6 +14,7 @@ export type Setting = {
   value: string | null;
   type: string;
   description: string | null;
+  isSensitive: boolean;
   metadata: any;
 };
 

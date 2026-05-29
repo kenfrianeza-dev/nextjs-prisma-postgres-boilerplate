@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -28,21 +29,31 @@ interface SettingCardProps {
  * A single setting card.
  *
  * Renders the appropriate input control based on `setting.type`
- * (boolean → Select, number/string → Input), with save button
+ * (boolean → Switch, number/string → Input), with save button
  * and read-only permission alert when applicable.
+ *
+ * When `setting.isSensitive` is true, the input renders as a password
+ * field with a show/hide toggle button (same pattern as the login
+ * password input).
  *
  * Reads `savingKey` directly from the Zustand store.
  */
 export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
   const savingKey = useSettingsStore((s) => s.savingKey);
   const isSaving = savingKey === setting.key;
-  const hiddenInputRef = useRef<HTMLInputElement>(null);
   const [mounted, setMounted] = useState<boolean>(false);
+  const [isRevealed, setIsRevealed] = useState<boolean>(false);
+  const [currentValue, setCurrentValue] = useState<string>(setting.value || '');
+  const hasChanges = currentValue !== (setting.value || '');
 
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
+
+  useEffect(() => {
+    setCurrentValue(setting.value || '');
+  }, [setting.value]);
 
   return (
     <Card className="shadow-none rounded-md border border-l-4 border-l-primary/50 border-t-primary/25 border-r-primary/25 border-b-primary/25 bg-secondary/10 hover:bg-secondary/25 transition-colors">
@@ -78,32 +89,55 @@ export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
                 <div className="flex flex-col items-start gap-2 w-full py-2">
                   <Switch
                     id={setting.key}
-                    defaultChecked={setting.value === 'true'}
+                    checked={currentValue === 'true'}
                     onCheckedChange={(checked) => {
-                      if (hiddenInputRef.current) {
-                        hiddenInputRef.current.value = checked ? 'true' : 'false';
-                      }
+                      setCurrentValue(checked ? 'true' : 'false');
                     }}
                     disabled={!canUpdate || isSaving}
                   />
                   <input 
-                    ref={hiddenInputRef}
                     type="hidden" 
                     name="value" 
-                    defaultValue={setting.value === 'true' ? 'true' : 'false'} 
+                    value={currentValue === 'true' ? 'true' : 'false'}
+                    readOnly
                   />
                   {!canUpdate && <ReadOnlyAlert />}
                 </div>
               ) : (
                 <div className="flex flex-col items-start gap-2 w-full">
-                  <Input
-                    id={setting.key}
-                    name="value"
-                    defaultValue={setting.value || ''}
-                    placeholder={`Enter ${setting.description?.toLowerCase() || 'value'}`}
-                    type={setting.type === 'number' ? 'number' : 'text'}
-                    disabled={!canUpdate || isSaving}
-                  />
+                  <div className="relative w-full">
+                    <Input
+                      id={setting.key}
+                      name="value"
+                      value={currentValue}
+                      onChange={(e) => setCurrentValue(e.target.value)}
+                      placeholder={`Enter ${setting.description?.toLowerCase() || 'value'}`}
+                      type={
+                        setting.isSensitive && !isRevealed
+                          ? 'password'
+                          : setting.type === 'number'
+                            ? 'number'
+                            : 'text'
+                      }
+                      disabled={!canUpdate || isSaving}
+                      className={setting.isSensitive ? 'pr-10' : ''}
+                    />
+                    {setting.isSensitive && (
+                      <button
+                        type="button"
+                        onClick={() => setIsRevealed((prev) => !prev)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
+                        tabIndex={-1}
+                        aria-label={isRevealed ? 'Hide value' : 'Show value'}
+                      >
+                        {isRevealed ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    )}
+                  </div>
                   {!canUpdate && <ReadOnlyAlert />}
                 </div>
               )}
@@ -111,7 +145,7 @@ export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
             <Button
               className="w-1/4 lg:w-1/8 mb-auto"
               type="submit"
-              disabled={!canUpdate || isSaving}
+              disabled={!canUpdate || isSaving || !hasChanges}
             >
               {isSaving ? <Spinner /> : 'Save'}
             </Button>

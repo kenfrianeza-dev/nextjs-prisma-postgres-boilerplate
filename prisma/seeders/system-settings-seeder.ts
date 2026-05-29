@@ -118,11 +118,11 @@ export async function seedSystemSettings(prisma: PrismaClient) {
       icon: "Code2",
       order: 8,
       settings: [
-        { key: "api_key", value: "", type: "string", description: "Internal API key" },
+        { key: "api_key", value: "", type: "string", description: "Internal API key", isSensitive: true },
         { key: "webhook_url", value: "", type: "string", description: "Default webhook destination" },
-        { key: "oauth_google_id", value: "", type: "string", description: "Google OAuth Client ID" },
-        { key: "stripe_public_key", value: "", type: "string", description: "Stripe Public Key" },
-        { key: "paypal_client_id", value: "", type: "string", description: "PayPal Client ID" },
+        { key: "oauth_google_id", value: "", type: "string", description: "Google OAuth Client ID", isSensitive: true },
+        { key: "stripe_public_key", value: "", type: "string", description: "Stripe Public Key", isSensitive: true },
+        { key: "paypal_client_id", value: "", type: "string", description: "PayPal Client ID", isSensitive: true },
       ]
     },
   ];
@@ -146,12 +146,15 @@ export async function seedSystemSettings(prisma: PrismaClient) {
     });
 
     for (const setting of category.settings) {
+      const isSensitive = 'isSensitive' in setting ? setting.isSensitive : false;
+
       await prisma.systemSetting.upsert({
         where: { key: setting.key },
         update: {
           value: setting.value,
           type: setting.type,
           description: setting.description,
+          isSensitive,
           categoryId: upsertedCategory.id,
         },
         create: {
@@ -159,6 +162,7 @@ export async function seedSystemSettings(prisma: PrismaClient) {
           value: setting.value,
           type: setting.type,
           description: setting.description,
+          isSensitive,
           categoryId: upsertedCategory.id,
         },
       });

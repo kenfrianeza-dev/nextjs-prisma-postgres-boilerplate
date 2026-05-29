@@ -143,6 +143,7 @@ model SystemSetting {
   value       String?
   type        String                @default("string") // string, boolean, number, json, etc.
   description String?
+  isSensitive Boolean               @default(false)
   metadata    Json?
   order       Int                   @default(0)
   categoryId  String
