@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/app/_components/ui/input';
 import { cn } from '@/app/utils';
@@ -35,9 +34,9 @@ export function PasswordInput({
         placeholder={placeholder}
         required={required}
         className={cn(
-          'h-11 bg-transparent border-white/[0.08] pr-10',
+          'h-11 bg-transparent border-input pr-10',
           'placeholder:text-muted-foreground/50',
-          'focus-visible:ring-1 focus-visible:ring-primary/40 focus-visible:border-primary/30',
+          'focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-ring',
           'transition-all duration-200',
           className,
         )}
@@ -45,7 +44,7 @@ export function PasswordInput({
       <button
         type="button"
         onClick={togglePasswordVisibility}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
         tabIndex={-1}
         aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
       >

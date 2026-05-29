@@ -25,12 +25,12 @@ export function LoginCard({ className }: { className?: string }) {
 
   return (
     <div className={className}>
-      <Card className="border-white/[0.06] bg-white/[0.02] backdrop-blur-xl shadow-2xl shadow-black/20">
+      <Card className="border-border/60 bg-card/80 backdrop-blur-xl shadow-xl shadow-black/5 dark:shadow-black/20">
         <CardHeader className="space-y-1 pb-6">
           <CardTitle className="text-2xl font-semibold tracking-tight text-foreground">
             Welcome back
           </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground/70">
+          <CardDescription className="text-sm text-muted-foreground">
             Sign in to your account to continue
           </CardDescription>
         </CardHeader>
@@ -48,7 +48,7 @@ export function LoginCard({ className }: { className?: string }) {
 
           {/* Footer links */}
           <div className="mt-6 space-y-3 text-center">
-            <p className="text-sm text-muted-foreground/60">
+            <p className="text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
               <Link
                 href="/signup"
@@ -57,18 +57,18 @@ export function LoginCard({ className }: { className?: string }) {
                 Sign up
               </Link>
             </p>
-            <p className="text-xs text-muted-foreground/40 leading-relaxed">
+            <p className="text-xs text-muted-foreground/70 leading-relaxed">
               By signing in, you agree to our{' '}
               <Link
                 href="#"
-                className="text-muted-foreground/60 hover:text-primary underline underline-offset-2 transition-colors duration-200"
+                className="text-muted-foreground hover:text-primary underline underline-offset-2 transition-colors duration-200"
               >
                 Terms of Service
               </Link>{' '}
               and{' '}
               <Link
                 href="#"
-                className="text-muted-foreground/60 hover:text-primary underline underline-offset-2 transition-colors duration-200"
+                className="text-muted-foreground hover:text-primary underline underline-offset-2 transition-colors duration-200"
               >
                 Privacy Policy
               </Link>

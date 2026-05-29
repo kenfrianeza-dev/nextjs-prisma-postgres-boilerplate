@@ -31,14 +31,14 @@ function GoogleIcon({ className }: { className?: string }) {
 
 /**
  * Google OAuth login button with official brand icon.
- * Displays as an outlined button with subtle hover effects.
+ * Uses semantic tokens for borders and hover states.
  */
 export function GoogleOAuthButton() {
   return (
     <Button
       type="button"
       variant="outline"
-      className="w-full h-11 bg-transparent border-white/[0.08] hover:bg-white/[0.04] hover:border-white/[0.14] text-muted-foreground transition-all duration-200 gap-3 cursor-pointer"
+      className="w-full h-11 bg-transparent border-input hover:bg-accent hover:text-accent-foreground text-muted-foreground transition-all duration-200 gap-3 cursor-pointer"
     >
       <GoogleIcon className="h-4 w-4" />
       <span className="text-sm font-medium">Continue with Google</span>

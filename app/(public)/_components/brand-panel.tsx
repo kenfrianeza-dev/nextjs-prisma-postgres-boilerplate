@@ -7,6 +7,9 @@ import { Badge } from '@/app/_components/ui/badge';
  * Server component — no client interactivity needed.
  * Renders the app branding, tagline, and feature checklist
  * against a rich visual background of grid + gradient blobs.
+ *
+ * Intentionally always dark — this is a decorative brand panel.
+ * The light/dark theme toggle affects the right (form) side only.
  */
 
 const features = [
@@ -17,7 +20,7 @@ const features = [
 
 export function BrandPanel() {
   return (
-    <section className="relative hidden lg:flex lg:w-[55%] flex-col items-start justify-between p-12 xl:p-16 overflow-hidden bg-[#030712]">
+    <section className="relative hidden lg:flex lg:w-[55%] flex-col items-start justify-between p-12 xl:p-16 overflow-hidden bg-zinc-950">
 
       {/* ── Background layers ─────────────────────────────── */}
 
@@ -36,7 +39,7 @@ export function BrandPanel() {
       <div className="absolute -bottom-20 left-1/4 w-[450px] h-[450px] rounded-full bg-cyan-500/10 blur-[110px] animate-blob-3" />
 
       {/* Subtle radial vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#030712_75%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgb(9_9_11)_75%)]" />
 
       {/* ── Content ───────────────────────────────────────── */}
       <div className="relative z-10 space-y-6">

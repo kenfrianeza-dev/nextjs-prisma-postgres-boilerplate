@@ -30,10 +30,10 @@ export function LoginFormFields({ state, action, isPending }: LoginFormFieldsPro
           type="email"
           placeholder="you@example.com"
           required
-          className="h-11 bg-transparent border-white/[0.08] placeholder:text-muted-foreground/50 focus-visible:ring-1 focus-visible:ring-primary/40 focus-visible:border-primary/30 transition-all duration-200"
+          className="h-11 bg-transparent border-input placeholder:text-muted-foreground/50 focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-ring transition-all duration-200"
         />
         {state?.errors?.email && (
-          <p className="text-xs text-red-400 mt-1">{state.errors.email}</p>
+          <p className="text-xs text-destructive mt-1">{state.errors.email}</p>
         )}
       </div>
 
@@ -48,7 +48,7 @@ export function LoginFormFields({ state, action, isPending }: LoginFormFieldsPro
           </Label>
           <Link
             href="#"
-            className="text-xs text-muted-foreground/60 hover:text-primary transition-colors duration-200"
+            className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200"
           >
             Forgot password?
           </Link>
@@ -60,7 +60,7 @@ export function LoginFormFields({ state, action, isPending }: LoginFormFieldsPro
           required
         />
         {state?.errors?.password && (
-          <p className="text-xs text-red-400 mt-1">{state.errors.password}</p>
+          <p className="text-xs text-destructive mt-1">{state.errors.password}</p>
         )}
       </div>
 
@@ -68,7 +68,7 @@ export function LoginFormFields({ state, action, isPending }: LoginFormFieldsPro
       {state?.message && (
         <Alert
           variant="destructive"
-          className="bg-red-500/10 border-red-500/20 text-red-400"
+          className="bg-destructive/10 border-destructive/20 text-destructive"
         >
           <AlertCircleIcon className="h-4 w-4" />
           <AlertTitle className="text-sm font-medium">

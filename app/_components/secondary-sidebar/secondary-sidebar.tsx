@@ -17,7 +17,7 @@ export const SecondarySidebar = ({
   permissions?: string[]
 }) => {
   return (
-    <aside className={cn("w-64 border-r dark:bg-background h-full flex flex-col shrink-0 bg-white", className)}>
+    <aside className={cn("w-72 border-r dark:bg-background h-full flex flex-col shrink-0 bg-white", className)}>
       <nav className="flex-1 overflow-y-auto">
         <div>
           {menuItems
