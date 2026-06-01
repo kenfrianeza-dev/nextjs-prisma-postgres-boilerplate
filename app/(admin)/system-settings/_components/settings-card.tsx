@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import {
   Card,
@@ -16,10 +16,11 @@ import { Switch } from '@/app/_components/ui/switch';
 import { Spinner } from '@/app/_components/ui/spinner';
 import { Skeleton } from '@/app/_components/ui/skeleton';
 import { ReadOnlyAlert } from '@/app/(admin)/system-settings/_components/read-only-alert';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/app/_components/ui/tooltip';
 import { useSettingsStore } from '@/app/(admin)/system-settings/_store/use-settings-store';
 import type { Setting } from '@/app/(admin)/system-settings/_types';
 
-interface SettingCardProps {
+interface SettingsCardProps {
   setting: Setting;
   canUpdate: boolean;
   onSave: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -38,11 +39,12 @@ interface SettingCardProps {
  *
  * Reads `savingKey` directly from the Zustand store.
  */
-export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
+export function SettingsCard({ setting, canUpdate, onSave }: SettingsCardProps) {
   const savingKey = useSettingsStore((s) => s.savingKey);
   const isSaving = savingKey === setting.key;
   const [mounted, setMounted] = useState<boolean>(false);
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [currentValue, setCurrentValue] = useState<string>(setting.value || '');
   const hasChanges = currentValue !== (setting.value || '');
 
@@ -53,10 +55,18 @@ export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
 
   useEffect(() => {
     setCurrentValue(setting.value || '');
+    setIsEditing(false);
+    setIsRevealed(false);
   }, [setting.value]);
 
+  const handleCancel = () => {
+    setCurrentValue(setting.value || '');
+    setIsEditing(false);
+    setIsRevealed(false);
+  };
+
   return (
-    <Card className="shadow-none rounded-md border border-l-4 border-l-primary/50 border-t-primary/25 border-r-primary/25 border-b-primary/25 bg-secondary/10 hover:bg-secondary/25 transition-colors">
+    <Card className="shadow-none rounded-md border border-l-4 border-l-secondary border-t-secondary border-r-secondary border-b-secondary bg-secondary/10 hover:bg-secondary/25 transition-colors">
       <CardHeader>
         <CardTitle className="text-base">
           {setting.description || setting.key}
@@ -87,14 +97,23 @@ export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
 
               {setting.type === 'boolean' ? (
                 <div className="flex flex-col items-start gap-2 w-full py-2">
-                  <Switch
-                    id={setting.key}
-                    checked={currentValue === 'true'}
-                    onCheckedChange={(checked) => {
-                      setCurrentValue(checked ? 'true' : 'false');
-                    }}
-                    disabled={!canUpdate || isSaving}
-                  />
+                  <Tooltip open={canUpdate && !isEditing ? undefined : false}>
+                    <TooltipTrigger asChild>
+                      <span className="inline-flex">
+                        <Switch
+                          id={setting.key}
+                          checked={currentValue === 'true'}
+                          onCheckedChange={(checked) => {
+                            setCurrentValue(checked ? 'true' : 'false');
+                          }}
+                          disabled={!canUpdate || isSaving || !isEditing}
+                        />
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      Click <kbd className="font-semibold">Edit</kbd> to enable edit mode and get access to this setting
+                    </TooltipContent>
+                  </Tooltip>
                   <input 
                     type="hidden" 
                     name="value" 
@@ -119,7 +138,7 @@ export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
                             ? 'number'
                             : 'text'
                       }
-                      disabled={!canUpdate || isSaving}
+                      disabled={!canUpdate || isSaving || !isEditing}
                       className={setting.isSensitive ? 'pr-10' : ''}
                     />
                     {setting.isSensitive && (
@@ -142,13 +161,33 @@ export function SettingCard({ setting, canUpdate, onSave }: SettingCardProps) {
                 </div>
               )}
             </div>
-            <Button
-              className="w-1/4 lg:w-1/8 mb-auto"
-              type="submit"
-              disabled={!canUpdate || isSaving || !hasChanges}
-            >
-              {isSaving ? <Spinner /> : 'Save'}
-            </Button>
+            {!isEditing ? (
+              <Button
+                className="w-1/4 lg:w-1/8 mb-auto"
+                type="button"
+                onClick={() => setIsEditing(true)}
+                disabled={!canUpdate || isSaving}
+              >
+                Edit
+              </Button>
+            ) : (
+              <div className="flex gap-2 mb-auto">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancel}
+                  disabled={isSaving}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={!canUpdate || isSaving || !hasChanges}
+                >
+                  {isSaving ? <Spinner /> : 'Save'}
+                </Button>
+              </div>
+            )}
           </form>
         )}
       </CardContent>

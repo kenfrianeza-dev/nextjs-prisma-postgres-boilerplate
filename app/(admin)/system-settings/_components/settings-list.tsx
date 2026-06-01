@@ -1,7 +1,7 @@
 'use client';
 
 import { ContainerHeader } from '@/app/_components/container';
-import { SettingCard } from '@/app/(admin)/system-settings/_components/setting-card';
+import { SettingsCard } from '@/app/(admin)/system-settings/_components/settings-card';
 import type { Category } from '@/app/(admin)/system-settings/_types';
 
 interface SettingsListProps {
@@ -22,7 +22,7 @@ export function SettingsList({ category, canUpdate, onSave }: SettingsListProps)
       />
       <div className="grid gap-4 pb-4">
         {category.settings.map((setting) => (
-          <SettingCard
+          <SettingsCard
             key={setting.id}
             setting={setting}
             canUpdate={canUpdate}
