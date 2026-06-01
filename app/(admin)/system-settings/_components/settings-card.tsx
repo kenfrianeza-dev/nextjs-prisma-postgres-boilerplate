@@ -125,22 +125,31 @@ export function SettingsCard({ setting, canUpdate, onSave }: SettingsCardProps) 
               ) : (
                 <div className="flex flex-col items-start gap-2 w-full">
                   <div className="relative w-full">
-                    <Input
-                      id={setting.key}
-                      name="value"
-                      value={currentValue}
-                      onChange={(e) => setCurrentValue(e.target.value)}
-                      placeholder={`Enter ${setting.description?.toLowerCase() || 'value'}`}
-                      type={
-                        setting.isSensitive && !isRevealed
-                          ? 'password'
-                          : setting.type === 'number'
-                            ? 'number'
-                            : 'text'
-                      }
-                      disabled={!canUpdate || isSaving || !isEditing}
-                      className={setting.isSensitive ? 'pr-10' : ''}
-                    />
+                    <Tooltip open={canUpdate && !isEditing ? undefined : false}>
+                      <TooltipTrigger asChild>
+                        <span>
+                          <Input
+                            id={setting.key}
+                            name="value"
+                            value={currentValue}
+                            onChange={(e) => setCurrentValue(e.target.value)}
+                            placeholder={`Enter ${setting.description?.toLowerCase() || 'value'}`}
+                            type={
+                              setting.isSensitive && !isRevealed
+                                ? 'password'
+                                : setting.type === 'number'
+                                  ? 'number'
+                                  : 'text'
+                            }
+                            disabled={!canUpdate || isSaving || !isEditing}
+                            className={setting.isSensitive ? 'pr-10' : ''}
+                          />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="left">
+                        Click <kbd className="font-semibold">Edit</kbd> to enable edit mode and get access to this setting
+                      </TooltipContent>
+                    </Tooltip>
                     {setting.isSensitive && (
                       <button
                         type="button"
